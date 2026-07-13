@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bosh vrachga murojaat - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="inner-page">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <div class="logo-text">
+                        <h1>MedCare</h1>
+                        <p>Xususiy klinika</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="../index.html" class="nav-link">Bosh sahifa</a>
+                    <a href="head-doctor.html" class="nav-link active">Bosh vrach</a>
+                    <a href="patients.html" class="nav-link">Bemorlar</a>
+                    <a href="doctors.html" class="nav-link">Shifokorlar</a>
+                    <a href="services.html" class="nav-link">Xizmatlar</a>
+                    <a href="medical-history.html" class="nav-link">Kasallik tarixi</a>
+                    <a href="payment.html" class="nav-link">To'lov</a>
+                    <a href="about.html" class="nav-link">Biz haqimizda</a>
+                </nav>
+                <div class="header-actions">
+                    <a href="tel:+998712001010" class="phone">📞 +998 71 200 10 10</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Bosh vrachga murojaat</h1>
+            <p>Savolingiz yoki murojaatingizni qoldiring</p>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <section class="page-content">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="../index.html" class="back-to-home">
+                    <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                </a>
+            </div>
+            
+            <div style="max-width: 700px; margin: 0 auto;">
+                <div style="background: var(--bg-light); padding: 40px; border-radius: 10px;">
+                    <h2 style="margin-bottom: 10px;"><i class="fas fa-clipboard-list"></i> Qabul belgilash</h2>
+                    <p style="color: var(--text-light); margin-bottom: 30px;">
+                        Shikoyat ko'rsang — biz 30 daqiqa ichida bog'lanamiz
+                    </p>
+
+                    <form id="consultationForm" onsubmit="return submitConsultation(event)">
+                        <div class="form-group">
+                            <label for="fullName"><i class="fas fa-user"></i> To'liq ismingiz *</label>
+                            <input type="text" id="fullName" class="form-control" 
+                                   placeholder="Masalan: Hasanov Bobur Aliyevich" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> Telefon raqam *</label>
+                            <input type="tel" id="phone" class="form-control" 
+                                   placeholder="+998 __ ___ __ __" 
+                                   oninput="formatPhoneNumber(this)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="specialty"><i class="fas fa-user-md"></i> Mutaxassislik tanlang *</label>
+                            <select id="specialty" class="form-control" required>
+                                <option value="">— Tanlang —</option>
+                                <option value="bosh-vrach">Bosh vrach</option>
+                                <option value="kardiolog">Kardiolog</option>
+                                <option value="nevrolog">Nevrolog</option>
+                                <option value="terapevt">Terapevt</option>
+                                <option value="pediatr">Pediatr</option>
+                                <option value="laborant">Laborant</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="appointmentDate"><i class="fas fa-calendar-alt"></i> Qabul sanasi *</label>
+                            <input type="date" id="appointmentDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-comment-medical"></i> Shikoyat yoki savolingiz</label>
+                            <textarea id="message" class="form-control" 
+                                      placeholder="Qisqacha shikoyatingizni yoki savolingizni yozing..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; padding: 15px; font-size: 16px;">
+                            <i class="fas fa-paper-plane"></i> Murojaat yuborish
+                        </button>
+                    </form>
+                </div>
+
+                <div style="margin-top: 30px; padding: 30px; background: var(--white); border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-info-circle"></i> Muhim ma'lumot</h3>
+                    <ul style="line-height: 2; color: var(--text-light);">
+                        <li>Bosh vrach konsultatsiyasi <strong>bepul</strong></li>
+                        <li>Javob 30 daqiqa ichida beriladi</li>
+                        <li>Shoshilinch holatlar uchun: <strong>+998 71 200 10 10</strong></li>
+                        <li>Ish vaqti: Dush-Shan 08:00-20:00, Yakshanba 09:00-15:00</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="../index.html" class="back-to-home">
+                        <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-icon">🏥</span>
+                        <h3>MedCare Klinikasi</h3>
+                    </div>
+                    <p>Sog'ligingiz saqlash — bizning ishimiz</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Aloqa</h4>
+                    <p>📞 +998 71 200 10 10<br>✉️ info@medcare.uz</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 MedCare. Barcha huquqlar himoyalangan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        function submitConsultation(e) {
+            e.preventDefault();
+            
+            if (!validateForm('consultationForm')) {
+                alert('❌ Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return false;
+            }
+            
+            // Collect form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                phone: document.getElementById('phone').value,
+                specialty: document.getElementById('specialty').value,
+                appointmentDate: document.getElementById('appointmentDate').value,
+                message: document.getElementById('message').value
+            };
+            
+            console.log('Murojaat yuborildi:', formData);
+            
+            // Simulate submission
+            alert('✅ Murojaatingiz qabul qilindi!\n\n' + 
+                  'Tez orada siz bilan bog\'lanamiz.\n' +
+                  'Telefon: ' + formData.phone);
+            
+            // Reset form
+            document.getElementById('consultationForm').reset();
+            
+            return false;
+        }
+    </script>
+</body>
+</html>

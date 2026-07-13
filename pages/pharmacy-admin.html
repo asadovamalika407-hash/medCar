@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dorixona Boshqaruvi - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo i {
+            font-size: 40px;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .menu-item {
+            padding: 16px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #a78bfa;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: white;
+        }
+
+        .logout-btn {
+            margin: 20px 25px;
+            padding: 14px;
+            background: rgba(239, 68, 68, 0.2);
+            color: white;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-action {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .stat-icon.blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .stat-icon.green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .stat-icon.orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+
+        .stat-details h3 {
+            font-size: 32px;
+            color: #1f2937;
+        }
+
+        .content-section {
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+        
+        .content-section#dashboard,
+        .content-section#medicines,
+        .content-section#orders,
+        .content-section#reports {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .btn-edit, .btn-delete, .btn-view {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-view {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .btn-view:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.active {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-row label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus,
+        .form-row textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 14px;
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+    </style>
+
+    <!-- QuaggaJS - Barcode Scanner Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.4/dist/quagga.min.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-pills"></i>
+                <h1>Dorixona</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="user-details">
+                    <h3 id="userName">Dorixona Admin</h3>
+                    <p>Qodirov Jahongir</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="menu-item" onclick="showSection('cashier')">
+                <i class="fas fa-cash-register"></i>
+                <span>Kassir</span>
+            </div>
+            <div class="menu-item" onclick="showSection('medicines')">
+                <i class="fas fa-pills"></i>
+                <span>Dorilar</span>
+            </div>
+            <div class="menu-item" onclick="showSection('orders')">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Buyurtmalar</span>
+            </div>
+            <div class="menu-item" onclick="showSection('reports')">
+                <i class="fas fa-chart-bar"></i>
+                <span>Hisobotlar</span>
+            </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Chiqish
+        </button>
+    </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title">
+                <i class="fas fa-tachometer-alt"></i>
+                <span id="pageTitle">Dashboard</span>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="content-section active" id="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>8</h3>
+                        <p>Jami dorilar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>5</h3>
+                        <p>Buyurtmalar (Iyun)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>255,500</h3>
+                        <p>Daromad (Iyun)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>2</h3>
+                        <p>Kam dorilar</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px;">
+                <i class="fas fa-clock"></i> So'nggi buyurtmalar
+            </h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bemor</th>
+                        <th>Palata</th>
+                        <th>Mahsulotlar</th>
+                        <th>Summa</th>
+                        <th>Holat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>B-005</td>
+                        <td>Mirzayev Jamshid</td>
+                        <td>A-201</td>
+                        <td>Aspirin, Omeprazol</td>
+                        <td>27,000 so'm</td>
+                        <td><span class="badge pending">Jarayonda</span></td>
+                    </tr>
+                    <tr>
+                        <td>B-004</td>
+                        <td>Hasanova Aziza</td>
+                        <td>D-115</td>
+                        <td>Paracetamol</td>
+                        <td>8,500 so'm</td>
+                        <td><span class="badge pending">Jarayonda</span></td>
+                    </tr>
+                    <tr>
+                        <td>B-003</td>
+                        <td>Toshmatov Sardor</td>
+                        <td>C-408</td>
+                        <td>Insulin, Vitamin D3</td>
+                        <td>145,000 so'm</td>
+                        <td><span class="badge active">Yetkazildi</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Kassir (POS) -->
+        <div class="content-section" id="cashier">
+            <!-- Kassir Header - Menyu -->
+            <div style="background: white; padding: 0; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); overflow: hidden;">
+                <div style="display: flex; border-bottom: 2px solid #f3f4f6;">
+                    <button onclick="showCashierTab('pos')" id="tabPos" class="cashier-tab active" style="flex: 1; padding: 18px 25px; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; border: none; cursor: pointer; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                        <i class="fas fa-cash-register"></i> Fiskal rejim
+                    </button>
+                    <button onclick="showCashierTab('receipts')" id="tabReceipts" class="cashier-tab" style="flex: 1; padding: 18px 25px; background: #f9fafb; color: #6b7280; border: none; cursor: pointer; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                        <i class="fas fa-receipt"></i> Cheklar
+                    </button>
+                    <button onclick="showCashierTab('customers')" id="tabCustomers" class="cashier-tab" style="flex: 1; padding: 18px 25px; background: #f9fafb; color: #6b7280; border: none; cursor: pointer; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                        <i class="fas fa-users"></i> Mijozlar
+                    </button>
+                    <button onclick="showCashierTab('reports')" id="tabReports" class="cashier-tab" style="flex: 1; padding: 18px 25px; background: #f9fafb; color: #6b7280; border: none; cursor: pointer; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                        <i class="fas fa-chart-pie"></i> Hisobot
+                    </button>
+                </div>
+            </div>
+
+            <!-- POS Tab - Fiskal rejim -->
+            <div id="posTab" class="cashier-content" style="display: block;">
+                <div style="display: grid; grid-template-columns: 1fr 400px; gap: 25px; height: calc(100vh - 280px);">
+                    
+                    <!-- Chap tomon - Mahsulotlar -->
+                    <div style="background: white; padding: 25px; border-radius: 15px; overflow-y: auto;">
+                        <h2 style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-search"></i> Mahsulot qidirish
+                        </h2>
+                        
+                        <!-- Qidiruv va Kamera -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 25px;">
+                            <div style="position: relative; flex: 1;">
+                                <input type="text" id="productSearch" placeholder="Dori nomi yoki barcode kiriting..." 
+                                    onkeyup="searchProducts()" 
+                                    style="width: 100%; padding: 15px 50px 15px 20px; border: 2px solid #e5e7eb; border-radius: 12px; font-size: 16px;">
+                                <i class="fas fa-barcode" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: #7c3aed; font-size: 20px;"></i>
+                            </div>
+                            <button onclick="startBarcodeScanner()" style="padding: 15px 25px; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: 600; white-space: nowrap;">
+                                <i class="fas fa-camera"></i> Skaner
+                            </button>
+                        </div>
+
+                        <!-- Mahsulotlar ro'yxati -->
+                        <div id="productsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                            <!-- JavaScript orqali to'ldiriladi -->
+                        </div>
+                    </div>
+
+                    <!-- O'ng tomon - Savatcha -->
+                    <div style="background: white; padding: 25px; border-radius: 15px; display: flex; flex-direction: column;">
+                        <h2 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+                            <span><i class="fas fa-shopping-cart"></i> Savatcha</span>
+                            <button onclick="clearCart()" style="padding: 8px 15px; background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600;">
+                                <i class="fas fa-trash"></i> Tozalash
+                            </button>
+                        </h2>
+
+                        <!-- Savatcha mahsulotlari -->
+                        <div id="cartItems" style="flex: 1; overflow-y: auto; margin-bottom: 20px; min-height: 200px;">
+                            <div style="text-align: center; padding: 40px 20px; color: #9ca3af;">
+                                <i class="fas fa-shopping-basket" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                                <p>Savatcha bo'sh</p>
+                            </div>
+                        </div>
+
+                        <!-- Jami summa -->
+                        <div style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: rgba(255,255,255,0.9); font-size: 16px;">Jami:</span>
+                                <span id="totalAmount" style="color: white; font-size: 32px; font-weight: 700;">0 so'm</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2);">
+                                <span style="color: rgba(255,255,255,0.8); font-size: 14px;">Mahsulotlar:</span>
+                                <span id="totalItems" style="color: rgba(255,255,255,0.9); font-weight: 600;">0 ta</span>
+                            </div>
+                        </div>
+
+                        <!-- To'lov tugmalari -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <button onclick="processPayment('cash')" style="padding: 18px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                                <i class="fas fa-money-bill-wave" style="font-size: 20px;"></i>
+                                Naqd
+                            </button>
+                            <button onclick="processPayment('card')" style="padding: 18px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s;">
+                                <i class="fas fa-credit-card" style="font-size: 20px;"></i>
+                                Karta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cheklar Tab -->
+            <div id="receiptsTab" class="cashier-content" style="display: none;">
+                <div style="background: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="margin-bottom: 25px;"><i class="fas fa-receipt"></i> Cheklar tarixi</h2>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Chek #</th>
+                                <th>Sana</th>
+                                <th>Summa</th>
+                                <th>To'lov</th>
+                                <th>Amallar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CHK-00012345</td>
+                                <td>2025-06-06 14:30</td>
+                                <td style="color: #10b981; font-weight: 700;">45,000 so'm</td>
+                                <td><span class="badge active">Naqd</span></td>
+                                <td>
+                                    <button class="btn-view">Ko'rish</button>
+                                    <button class="btn-edit">Chop etish</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>CHK-00012344</td>
+                                <td>2025-06-06 14:15</td>
+                                <td style="color: #10b981; font-weight: 700;">120,000 so'm</td>
+                                <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Karta</span></td>
+                                <td>
+                                    <button class="btn-view">Ko'rish</button>
+                                    <button class="btn-edit">Chop etish</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Mijozlar Tab -->
+            <div id="customersTab" class="cashier-content" style="display: none;">
+                <div style="background: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="margin-bottom: 25px;"><i class="fas fa-users"></i> Doimiy mijozlar</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 12px; border-left: 4px solid #7c3aed;">
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 700; color: #1f2937; font-size: 16px;">Aliyev Vali</div>
+                                    <div style="color: #6b7280; font-size: 14px;">+998 90 123 45 67</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                                <div>
+                                    <div style="color: #6b7280; font-size: 12px;">Jami xaridlar</div>
+                                    <div style="color: #7c3aed; font-weight: 700; font-size: 16px;">15 ta</div>
+                                </div>
+                                <div>
+                                    <div style="color: #6b7280; font-size: 12px;">Summa</div>
+                                    <div style="color: #10b981; font-weight: 700; font-size: 16px;">850,000</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+                                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 700; color: #1f2937; font-size: 16px;">Rahimova Malika</div>
+                                    <div style="color: #6b7280; font-size: 14px;">+998 91 234 56 78</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid #e5e7eb;">
+                                <div>
+                                    <div style="color: #6b7280; font-size: 12px;">Jami xaridlar</div>
+                                    <div style="color: #3b82f6; font-weight: 700; font-size: 16px;">8 ta</div>
+                                </div>
+                                <div>
+                                    <div style="color: #6b7280; font-size: 12px;">Summa</div>
+                                    <div style="color: #10b981; font-weight: 700; font-size: 16px;">450,000</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hisobot Tab -->
+            <div id="reportsTab" class="cashier-content" style="display: none;">
+                <div style="background: white; padding: 30px; border-radius: 15px;">
+                    <h2 style="margin-bottom: 25px;"><i class="fas fa-chart-pie"></i> Kunlik hisobot</h2>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 25px; border-radius: 15px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 10px;">Kunlik savdo</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-bottom: 5px;">1,250,000</div>
+                            <div style="font-size: 14px; opacity: 0.8;">so'm</div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; padding: 25px; border-radius: 15px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 10px;">Cheklar soni</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-bottom: 5px;">47</div>
+                            <div style="font-size: 14px; opacity: 0.8;">ta chek</div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 25px; border-radius: 15px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 10px;">O'rtacha chek</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-bottom: 5px;">26,595</div>
+                            <div style="font-size: 14px; opacity: 0.8;">so'm</div>
+                        </div>
+
+                        <div style="background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); color: white; padding: 25px; border-radius: 15px;">
+                            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 10px;">Naqd to'lovlar</div>
+                            <div style="font-size: 32px; font-weight: 700; margin-bottom: 5px;">750,000</div>
+                            <div style="font-size: 14px; opacity: 0.8;">so'm (60%)</div>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; padding: 40px; background: #f9fafb; border-radius: 12px;">
+                        <i class="fas fa-chart-bar" style="font-size: 64px; color: #d1d5db; margin-bottom: 15px;"></i>
+                        <p style="color: #6b7280; font-size: 16px;">Batafsil hisobot va grafiklar tez orada...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barcode Scanner Modal -->
+            <div id="barcodeScannerModal" class="modal">
+                <div class="modal-content" style="max-width: 600px;">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-camera"></i> Barcode Skaner</h2>
+                        <button class="modal-close" onclick="stopBarcodeScanner()">×</button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;">
+                        <div id="cameraContainer" style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
+                            <video id="barcodeScannerVideo" autoplay playsinline style="width: 100%; border-radius: 12px; background: #000;"></video>
+                            <canvas id="barcodeCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+                        </div>
+                        <p id="scannerStatus" style="margin-top: 20px; color: #6b7280; font-weight: 600;">Kamera ishga tushirilmoqda...</p>
+                        <div id="scannerResult" style="margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 10px; display: none;">
+                            <p style="color: #10b981; font-weight: 600; font-size: 18px;"><i class="fas fa-check-circle"></i> Barcode topildi!</p>
+                            <p id="scannedBarcode" style="color: #1f2937; font-weight: 700; font-size: 24px; font-family: 'Courier New', monospace; margin-top: 10px;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dorilar -->
+        <div class="content-section" id="medicines">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 25px;">
+                <h2><i class="fas fa-pills"></i> Dorilar ro'yxati</h2>
+                <button class="btn-action" onclick="addMedicine()">
+                    <i class="fas fa-plus"></i> Yangi dori
+                </button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Dori nomi</th>
+                        <th>Barcode</th>
+                        <th>Guruh</th>
+                        <th>Miqdor</th>
+                        <th>Narxi</th>
+                        <th>Stock</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody id="medicinesTable">
+                    <tr>
+                        <td>1</td>
+                        <td>Metformin 500mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234567</td>
+                        <td>Antidiabetik</td>
+                        <td>60 dona/quti</td>
+                        <td>18,000 so'm</td>
+                        <td><span class="badge active">45 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(1)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(1)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(1)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Lisinopril 10mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234568</td>
+                        <td>Gipotonziv</td>
+                        <td>30 dona/quti</td>
+                        <td>22,000 so'm</td>
+                        <td><span class="badge active">120 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(2)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(2)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(2)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Amoksisillin 500mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234569</td>
+                        <td>Antibiotik</td>
+                        <td>20 dona/quti</td>
+                        <td>35,000 so'm</td>
+                        <td><span class="badge pending">8 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(3)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(3)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(3)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Omeprazol 20mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234570</td>
+                        <td>Antiulser</td>
+                        <td>14 dona/quti</td>
+                        <td>15,000 so'm</td>
+                        <td><span class="badge active">85 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(4)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(4)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(4)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Insulin Glargin</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234571</td>
+                        <td>Insulin</td>
+                        <td>5 ml/flakon</td>
+                        <td>120,000 so'm</td>
+                        <td><span class="badge pending">15 flakon</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(5)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(5)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(5)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Paracetamol 500mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234572</td>
+                        <td>Og'riq qoldiruvchi</td>
+                        <td>20 dona/quti</td>
+                        <td>8,500 so'm</td>
+                        <td><span class="badge active">200 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(6)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(6)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(6)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Vitamin D3 2000IU</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234573</td>
+                        <td>Vitamin</td>
+                        <td>60 dona/quti</td>
+                        <td>25,000 so'm</td>
+                        <td><span class="badge active">110 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(7)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(7)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(7)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Aspirin 100mg</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">4680001234574</td>
+                        <td>Qon suyuqlashtiruvchi</td>
+                        <td>56 dona/quti</td>
+                        <td>12,000 so'm</td>
+                        <td><span class="badge active">90 quti</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(8)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(8)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(8)">O'chirish</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Buyurtmalar -->
+        <div class="content-section" id="orders">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2><i class="fas fa-shopping-cart"></i> Buyurtmalar</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-action" onclick="filterOrders('all')" id="filterAll">
+                        <i class="fas fa-list"></i> Barchasi
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="filterOrders('delivered')" id="filterDelivered">
+                        <i class="fas fa-check"></i> Yetkazilgan
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);" onclick="filterOrders('pending')" id="filterPending">
+                        <i class="fas fa-clock"></i> Kutilmoqda
+                    </button>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bemor</th>
+                        <th>ID</th>
+                        <th>Palata</th>
+                        <th>Telefon</th>
+                        <th>Mahsulotlar</th>
+                        <th>Summa</th>
+                        <th>Sana</th>
+                        <th>Holat</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTable"></tbody>
+            </table>
+        </div>
+
+        <!-- Hisobotlar -->
+        <div class="content-section" id="reports">
+            <h2 style="margin-bottom: 25px;"><i class="fas fa-chart-bar"></i> Moliyaviy hisobotlar</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card" style="cursor: pointer; transition: all 0.3s;" onclick="showMonthlyReport()">
+                    <div class="stat-icon green">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>255,500</h3>
+                        <p>Iyun savdo</p>
+                    </div>
+                </div>
+                <div class="stat-card" style="cursor: pointer; transition: all 0.3s;" onclick="showOrdersReport()">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>5</h3>
+                        <p>Buyurtmalar soni</p>
+                    </div>
+                </div>
+                <div class="stat-card" style="cursor: pointer; transition: all 0.3s;" onclick="showAverageReport()">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>51,100</h3>
+                        <p>O'rtacha buyurtma</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 20px;">
+                <i class="fas fa-coins"></i> Sotuvlar tarixi
+            </h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Sana</th>
+                        <th>Mahsulotlar</th>
+                        <th>Miqdor</th>
+                        <th>Summa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>06.06.2025 18:15</td>
+                        <td>Aspirin, Omeprazol</td>
+                        <td>2 quti</td>
+                        <td style="color: #10b981; font-weight: 700;">+27,000 so'm</td>
+                    </tr>
+                    <tr>
+                        <td>06.06.2025 17:00</td>
+                        <td>Paracetamol</td>
+                        <td>1 quti</td>
+                        <td style="color: #10b981; font-weight: 700;">+8,500 so'm</td>
+                    </tr>
+                    <tr>
+                        <td>06.06.2025 16:20</td>
+                        <td>Insulin, Vitamin D3</td>
+                        <td>2 dona</td>
+                        <td style="color: #10b981; font-weight: 700;">+145,000 so'm</td>
+                    </tr>
+                    <tr>
+                        <td>06.06.2025 15:00</td>
+                        <td>Amoksisillin</td>
+                        <td>1 quti</td>
+                        <td style="color: #10b981; font-weight: 700;">+35,000 so'm</td>
+                    </tr>
+                    <tr>
+                        <td>06.06.2025 14:30</td>
+                        <td>Metformin, Lisinopril</td>
+                        <td>2 quti</td>
+                        <td style="color: #10b981; font-weight: 700;">+40,000 so'm</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Medicine Modal -->
+    <div class="modal" id="addMedicineModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-plus-circle"></i> Yangi dori qo'shish</h2>
+                <button class="modal-close" onclick="closeModal('addMedicineModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-grid" id="addMedicineForm" onsubmit="saveMedicine(event)">
+                    <div class="form-row">
+                        <label><i class="fas fa-pills"></i> Dori nomi *</label>
+                        <input type="text" id="medicineName" placeholder="Masalan: Paracetamol 500mg" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-barcode"></i> Barcode</label>
+                        <input type="text" id="medicineBarcode" placeholder="Avtomatik generatsiya qilinadi" readonly style="background: #f3f4f6; cursor: not-allowed;">
+                        <small style="color: #6b7280; font-size: 12px; margin-top: 5px;">⚠️ Barcode avtomatik yaratiladi</small>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-tags"></i> Guruh / Kategoriya *</label>
+                        <select id="medicineCategory" required>
+                            <option value="">Tanlang</option>
+                            <option value="Antidiabetik">Antidiabetik</option>
+                            <option value="Antibiotik">Antibiotik</option>
+                            <option value="Og'riq qoldiruvchi">Og'riq qoldiruvchi</option>
+                            <option value="Gipotonziv">Gipotonziv (bosim)</option>
+                            <option value="Antiulser">Antiulser</option>
+                            <option value="Vitamin">Vitamin</option>
+                            <option value="Insulin">Insulin</option>
+                            <option value="Qon suyuqlashtiruvchi">Qon suyuqlashtiruvchi</option>
+                            <option value="Boshqa">Boshqa</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-box"></i> Miqdor (dona/quti/flakon) *</label>
+                        <input type="text" id="medicineQuantity" placeholder="Masalan: 20 dona/quti" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-money-bill-wave"></i> Narxi (so'm) *</label>
+                        <input type="number" id="medicinePrice" placeholder="Masalan: 15000" min="0" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-warehouse"></i> Stock miqdori *</label>
+                        <input type="number" id="medicineStock" placeholder="Masalan: 50" min="0" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label><i class="fas fa-info-circle"></i> Qo'shimcha ma'lumot</label>
+                        <textarea id="medicineDescription" rows="3" placeholder="Dori haqida qo'shimcha ma'lumot (ixtiyoriy)"></textarea>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-check"></i> Saqlash
+                        </button>
+                        <button type="button" class="btn-cancel" onclick="closeModal('addMedicineModal')">
+                            Bekor qilish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Order Modal -->
+    <div class="modal" id="viewOrderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-shopping-cart"></i> Buyurtma ma'lumotlari</h2>
+                <button class="modal-close" onclick="closeModal('viewOrderModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="orderDetails"></div>
+                <div class="modal-actions" id="orderActions"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Himoya
+        if (!sessionStorage.getItem('isLoggedIn') || sessionStorage.getItem('userRole') !== 'pharmacy') {
+            window.location.href = 'login.html';
+        }
+
+        // Dorilar ma'lumotlar bazasi - LocalStorage bilan sinxronlash
+        let medicines = [];
+
+        // LocalStorage dan dorilarni yuklash yoki boshlang'ich ma'lumotlar
+        function initializeMedicines() {
+            const savedMedicines = localStorage.getItem('medcare_medicines');
+            if (savedMedicines) {
+                medicines = JSON.parse(savedMedicines);
+            } else {
+                // Boshlang'ich ma'lumotlar (faqat birinchi marta)
+                medicines = [
+                    { id: 1, name: 'Metformin 500mg', barcode: '4680001234567', category: 'Antidiabetik', quantity: '60 dona/quti', price: 18000, stock: 45 },
+                    { id: 2, name: 'Lisinopril 10mg', barcode: '4680001234568', category: 'Gipotonziv', quantity: '30 dona/quti', price: 22000, stock: 120 },
+                    { id: 3, name: 'Amoksisillin 500mg', barcode: '4680001234569', category: 'Antibiotik', quantity: '20 dona/quti', price: 35000, stock: 8 },
+                    { id: 4, name: 'Omeprazol 20mg', barcode: '4680001234570', category: 'Antiulser', quantity: '14 dona/quti', price: 15000, stock: 85 },
+                    { id: 5, name: 'Insulin Glargin', barcode: '4680001234571', category: 'Insulin', quantity: '5 ml/flakon', price: 120000, stock: 15 },
+                    { id: 6, name: 'Paracetamol 500mg', barcode: '4680001234572', category: 'Og\'riq qoldiruvchi', quantity: '20 dona/quti', price: 8500, stock: 200 },
+                    { id: 7, name: 'Vitamin D3 2000IU', barcode: '4680001234573', category: 'Vitamin', quantity: '60 dona/quti', price: 25000, stock: 110 },
+                    { id: 8, name: 'Aspirin 100mg', barcode: '4680001234574', category: 'Qon suyuqlashtiruvchi', quantity: '56 dona/quti', price: 12000, stock: 90 }
+                ];
+                saveMedicinesToStorage();
+            }
+        }
+
+        // LocalStorage ga saqlash
+        function saveMedicinesToStorage() {
+            localStorage.setItem('medcare_medicines', JSON.stringify(medicines));
+            // Kassir sahifasi uchun ham yangilash eventi
+            window.dispatchEvent(new Event('medicinesUpdated'));
+        }
+
+        // Buyurtmalar ma'lumotlar bazasi
+        let orders = [
+            { id: 1, orderNum: 'B-001', patient: 'Aliyev Vali', patientId: 'P-001', room: 'A-305', phone: '+998 90 123 45 67', products: 'Metformin, Lisinopril', amount: 40000, date: '06.06.2025 14:30', status: 'delivered', notes: 'Tezkor yetkazib berish' },
+            { id: 2, orderNum: 'B-002', patient: 'Rahimova Malika', patientId: 'P-002', room: 'B-212', phone: '+998 91 234 56 78', products: 'Amoksisillin', amount: 35000, date: '06.06.2025 15:00', status: 'pending', notes: '' },
+            { id: 3, orderNum: 'B-003', patient: 'Toshmatov Sardor', patientId: 'P-003', room: 'C-408', phone: '+998 93 345 67 89', products: 'Insulin, Vitamin D3', amount: 145000, date: '06.06.2025 16:20', status: 'delivered', notes: 'Muzlatgichda saqlash' },
+            { id: 4, orderNum: 'B-004', patient: 'Hasanova Aziza', patientId: 'P-004', room: 'D-115', phone: '+998 94 456 78 90', products: 'Paracetamol', amount: 8500, date: '06.06.2025 17:00', status: 'pending', notes: '' },
+            { id: 5, orderNum: 'B-005', patient: 'Mirzayev Jamshid', patientId: 'P-005', room: 'A-201', phone: '+998 95 567 89 01', products: 'Aspirin, Omeprazol', amount: 27000, date: '06.06.2025 18:15', status: 'pending', notes: '' }
+        ];
+
+        let currentFilter = 'all';
+
+        // Kassir tizimi - barcha funksiyalar pharmacy-cashier.js faylida
+
+        // Bo'limlar
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            event.target.closest('.menu-item').classList.add('active');
+
+            const titles = {
+                dashboard: 'Dashboard',
+                cashier: 'Kassir Tizimi',
+                medicines: 'Dorilar',
+                orders: 'Buyurtmalar',
+                reports: 'Hisobotlar'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId];
+
+            // Agar kassir bo'limiga kirsa - mahsulotlarni yuklash
+            if (sectionId === 'cashier') {
+                setTimeout(function() {
+                    if (typeof loadProducts === 'function') {
+                        loadProducts();
+                    }
+                }, 100);
+            }
+
+            // Agar dorilar bo'limiga kirsa
+            if (sectionId === 'medicines') {
+                updateMedicinesTable();
+            }
+
+            // Agar buyurtmalar bo'limiga kirsa
+            if (sectionId === 'orders') {
+                updateOrdersTable();
+            }
+        }
+
+        // Dorilar jadvalini yangilash
+        function updateMedicinesTable() {
+            const tbody = document.getElementById('medicinesTable');
+            tbody.innerHTML = medicines.map(med => {
+                const stockBadge = med.stock < 20 ? 'pending' : 'active';
+                return `
+                    <tr>
+                        <td>${med.id}</td>
+                        <td>${med.name}</td>
+                        <td style="font-family: 'Courier New', monospace; background: #e0e7ff; padding: 6px 10px; border-radius: 6px; font-size: 13px; font-weight: 600; color: #4338ca;">${med.barcode}</td>
+                        <td>${med.category}</td>
+                        <td>${med.quantity}</td>
+                        <td>${med.price.toLocaleString('uz-UZ')} so'm</td>
+                        <td><span class="badge ${stockBadge}">${med.stock} ${med.quantity.includes('quti') ? 'quti' : med.quantity.includes('flakon') ? 'flakon' : 'dona'}</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewMedicine(${med.id})">Ko'rish</button>
+                            <button class="btn-edit" onclick="editMedicine(${med.id})">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteMedicine(${med.id})">O'chirish</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Buyurtmalar jadvalini yangilash
+        function updateOrdersTable() {
+            const tbody = document.getElementById('ordersTable');
+            
+            // Filtr
+            let filteredOrders = orders;
+            if (currentFilter === 'delivered') {
+                filteredOrders = orders.filter(o => o.status === 'delivered');
+            } else if (currentFilter === 'pending') {
+                filteredOrders = orders.filter(o => o.status === 'pending');
+            }
+
+            tbody.innerHTML = filteredOrders.map(order => {
+                const statusBadge = order.status === 'delivered' ? 'active' : 'pending';
+                const statusText = order.status === 'delivered' ? 'Yetkazildi' : 'Kutilmoqda';
+                return `
+                    <tr>
+                        <td>${order.orderNum}</td>
+                        <td>${order.patient}</td>
+                        <td>${order.patientId}</td>
+                        <td>${order.room}</td>
+                        <td>${order.phone}</td>
+                        <td>${order.products}</td>
+                        <td>${order.amount.toLocaleString('uz-UZ')} so'm</td>
+                        <td>${order.date}</td>
+                        <td><span class="badge ${statusBadge}">${statusText}</span></td>
+                        <td>
+                            <button class="btn-view" onclick="viewOrder(${order.id})">Ko'rish</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Filtr
+        function filterOrders(filter) {
+            currentFilter = filter;
+            updateOrdersTable();
+        }
+
+        // Modal ochish (dori)
+        function addMedicine() {
+            document.getElementById('addMedicineForm').reset();
+            document.getElementById('addMedicineModal').classList.add('active');
+        }
+
+        // Modal yopish
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Dorini saqlash
+        function saveMedicine(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('medicineName').value;
+            const category = document.getElementById('medicineCategory').value;
+            const quantity = document.getElementById('medicineQuantity').value;
+            const price = parseInt(document.getElementById('medicinePrice').value);
+            const stock = parseInt(document.getElementById('medicineStock').value);
+            const description = document.getElementById('medicineDescription').value;
+
+            const newId = medicines.length > 0 ? Math.max(...medicines.map(m => m.id)) + 1 : 1;
+            
+            // Barcode generatsiya qilish
+            const barcode = '46800012345' + (70 + newId);
+
+            const newMedicine = {
+                id: newId,
+                name: name,
+                barcode: barcode,
+                category: category,
+                quantity: quantity,
+                price: price,
+                stock: stock,
+                description: description
+            };
+
+            medicines.push(newMedicine);
+            saveMedicinesToStorage(); // LocalStorage ga saqlash
+            updateMedicinesTable();
+            closeModal('addMedicineModal');
+            showNotification(`✅ ${name} muvaffaqiyatli qo'shildi!`, 'success');
+        }
+
+        // Dori ko'rish
+        function viewMedicine(id) {
+            const med = medicines.find(m => m.id === id);
+            if (med) {
+                alert(`📋 Dori ma'lumotlari:\n\nNomi: ${med.name}\nGuruh: ${med.category}\nMiqdor: ${med.quantity}\nNarxi: ${med.price.toLocaleString('uz-UZ')} so'm\nStock: ${med.stock}\n${med.description ? '\nMa\'lumot: ' + med.description : ''}`);
+            }
+        }
+
+        // Dori tahrirlash
+        function editMedicine(id) {
+            const med = medicines.find(m => m.id === id);
+            if (med) {
+                const newStock = prompt(`${med.name} uchun yangi stock miqdorini kiriting:`, med.stock);
+                if (newStock !== null && !isNaN(newStock)) {
+                    med.stock = parseInt(newStock);
+                    saveMedicinesToStorage(); // LocalStorage ga saqlash
+                    updateMedicinesTable();
+                    showNotification(`✅ ${med.name} yangilandi!`, 'success');
+                }
+            }
+        }
+
+        // Dori o'chirish
+        function deleteMedicine(id) {
+            const med = medicines.find(m => m.id === id);
+            if (med && confirm(`${med.name}ni o'chirmoqchimisiz?\nBu amalni qaytarib bo'lmaydi!`)) {
+                medicines = medicines.filter(m => m.id !== id);
+                saveMedicinesToStorage(); // LocalStorage ga saqlash
+                updateMedicinesTable();
+                showNotification(`✅ ${med.name} o'chirildi!`, 'success');
+            }
+        }
+
+        // Buyurtma ko'rish
+        function viewOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (!order) return;
+
+            const details = document.getElementById('orderDetails');
+            const statusBadge = order.status === 'delivered' ? 'active' : 'pending';
+            const statusText = order.status === 'delivered' ? 'Yetkazildi' : 'Kutilmoqda';
+            
+            details.innerHTML = `
+                <div style="display: grid; gap: 15px;">
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Buyurtma #:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.orderNum}</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Bemor:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.patient} (${order.patientId})</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Palata:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.room}</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Telefon:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.phone}</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Mahsulotlar:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.products}</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Summa:</strong>
+                        <span style="color: #10b981; font-weight: 700; font-size: 18px;">${order.amount.toLocaleString('uz-UZ')} so'm</span>
+                    </div>
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Sana:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.date}</span>
+                    </div>
+                    ${order.notes ? `<div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Izoh:</strong>
+                        <span style="color: #1f2937; font-weight: 500;">${order.notes}</span>
+                    </div>` : ''}
+                    <div style="padding: 15px; background: #f9fafb; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <strong style="color: #4b5563;">Holat:</strong>
+                        <span class="badge ${statusBadge}">${statusText}</span>
+                    </div>
+                </div>
+            `;
+
+            const actions = document.getElementById('orderActions');
+            if (order.status === 'pending') {
+                actions.innerHTML = `
+                    <button class="btn-save" onclick="deliverOrder(${order.id})">
+                        <i class="fas fa-check"></i> Yetkazildi deb belgilash
+                    </button>
+                    <button class="btn-cancel" onclick="closeModal('viewOrderModal')">
+                        Yopish
+                    </button>
+                `;
+            } else {
+                actions.innerHTML = `
+                    <button class="btn-cancel" onclick="closeModal('viewOrderModal')" style="flex: none; width: 100%;">
+                        Yopish
+                    </button>
+                `;
+            }
+
+            document.getElementById('viewOrderModal').classList.add('active');
+        }
+
+        // Buyurtmani yetkazildi deb belgilash
+        function deliverOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (order) {
+                order.status = 'delivered';
+                updateOrdersTable();
+                closeModal('viewOrderModal');
+                showNotification(`✅ Buyurtma ${order.orderNum} yetkazildi! Kirimga qo'shildi: ${order.amount.toLocaleString('uz-UZ')} so'm`, 'success');
+            }
+        }
+
+        // Xabar ko'rsatish
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b'
+            };
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: ${colors[type]};
+                color: white;
+                padding: 18px 28px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 3000;
+                font-weight: 600;
+                font-size: 16px;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // CSS animatsiyalar
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Chiqish
+        function logout() {
+            if (confirm('Tizimdan chiqmoqchimisiz?')) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Hisobotlar bo'limi funktsiyalari
+        function showMonthlyReport() {
+            const modalContent = `
+                <div style="padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 15px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line" style="font-size: 40px; color: white;"></i>
+                        </div>
+                        <h2 style="color: #1f2937; font-size: 24px; margin-bottom: 5px;">
+                            <i class="fas fa-chart-bar"></i> Iyun Oyi Savdo Hisoboti
+                        </h2>
+                        <p style="color: #6b7280;">Iyun 2025</p>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: center;">
+                        <div style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 5px;">
+                            <i class="fas fa-dollar-sign"></i> Jami Daromad
+                        </div>
+                        <div style="color: white; font-size: 36px; font-weight: 700;">
+                            255,500 so'm
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #3b82f6;">
+                            <i class="fas fa-calendar-day" style="font-size: 24px; color: #3b82f6; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 5px;">42,583</div>
+                            <div style="font-size: 13px; color: #6b7280;">Kunlik o'rtacha</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 12px; text-align: center; border-left: 4px solid #8b5cf6;">
+                            <i class="fas fa-calendar-alt" style="font-size: 24px; color: #8b5cf6; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #1f2937; margin-bottom: 5px;">6</div>
+                            <div style="font-size: 13px; color: #6b7280;">Ish kunlari</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <i class="fas fa-arrow-up" style="color: #10b981; font-size: 20px;"></i>
+                            <strong style="color: #1f2937;">Eng yaxshi savdo:</strong>
+                            <span style="color: #6b7280;">06.06.2025 16:20</span>
+                            <span style="color: #10b981; font-weight: 700; margin-left: auto;">145,000 so'm</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-arrow-down" style="color: #ef4444; font-size: 20px;"></i>
+                            <strong style="color: #1f2937;">Eng kichik savdo:</strong>
+                            <span style="color: #6b7280;">06.06.2025 17:00</span>
+                            <span style="color: #ef4444; font-weight: 700; margin-left: auto;">8,500 so'm</span>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                            <i class="fas fa-boxes" style="color: #3b82f6; font-size: 18px;"></i>
+                            <strong style="color: #1f2937;">Jami buyurtmalar:</strong>
+                            <span style="color: #3b82f6; font-weight: 700; margin-left: auto;">5 ta</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-pills" style="color: #8b5cf6; font-size: 18px;"></i>
+                            <strong style="color: #1f2937;">Eng qimmat dori:</strong>
+                            <span style="color: #8b5cf6; font-weight: 700; margin-left: auto;">Insulin (120,000 so'm)</span>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 20px; border-radius: 12px; text-align: center;">
+                        <i class="fas fa-check-circle" style="font-size: 30px; color: #2563eb; margin-bottom: 10px;"></i>
+                        <div style="color: #1f2937; font-size: 14px; margin-bottom: 5px;">Holat</div>
+                        <div style="color: #10b981; font-size: 20px; font-weight: 700;">3 ta yetkazildi, 2 ta jarayonda</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; padding: 20px; border-top: 2px solid #f3f4f6;">
+                    <button onclick="document.getElementById('customReportModal').classList.remove('active')" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-check"></i> Yopish
+                    </button>
+                </div>
+            `;
+            
+            showCustomModal('Iyun Oyi Savdo Hisoboti', modalContent);
+        }
+
+        function showOrdersReport() {
+            const modalContent = `
+                <div style="padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 15px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-shopping-cart" style="font-size: 40px; color: white;"></i>
+                        </div>
+                        <h2 style="color: #1f2937; font-size: 24px;">
+                            <i class="fas fa-shopping-bag"></i> Buyurtmalar Hisoboti
+                        </h2>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: center;">
+                        <div style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 5px;">
+                            <i class="fas fa-list"></i> Jami Buyurtmalar
+                        </div>
+                        <div style="color: white; font-size: 36px; font-weight: 700;">5 ta</div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px;">
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #10b981;">
+                            <i class="fas fa-check-circle" style="font-size: 22px; color: #10b981; margin-bottom: 8px;"></i>
+                            <div style="font-size: 22px; font-weight: 700; color: #1f2937;">2</div>
+                            <div style="font-size: 12px; color: #6b7280;">Yetkazilgan</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #f59e0b;">
+                            <i class="fas fa-clock" style="font-size: 22px; color: #f59e0b; margin-bottom: 8px;"></i>
+                            <div style="font-size: 22px; font-weight: 700; color: #1f2937;">3</div>
+                            <div style="font-size: 12px; color: #6b7280;">Kutilmoqda</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #ef4444;">
+                            <i class="fas fa-times-circle" style="font-size: 22px; color: #ef4444; margin-bottom: 8px;"></i>
+                            <div style="font-size: 22px; font-weight: 700; color: #1f2937;">0</div>
+                            <div style="font-size: 12px; color: #6b7280;">Bekor</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-star" style="color: #f59e0b;"></i>
+                            Eng ko'p buyurtma qilingan dorilar:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #10b981; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">1</span>
+                                <i class="fas fa-pills" style="color: #7c3aed;"></i>
+                                <span style="color: #1f2937;">Insulin</span>
+                                <span style="color: #10b981; font-weight: 700; margin-left: auto;">1 buyurtma</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #3b82f6; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">2</span>
+                                <i class="fas fa-pills" style="color: #7c3aed;"></i>
+                                <span style="color: #1f2937;">Metformin</span>
+                                <span style="color: #3b82f6; font-weight: 700; margin-left: auto;">1 buyurtma</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #f59e0b; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">3</span>
+                                <i class="fas fa-pills" style="color: #7c3aed;"></i>
+                                <span style="color: #1f2937;">Lisinopril</span>
+                                <span style="color: #f59e0b; font-weight: 700; margin-left: auto;">1 buyurtma</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px;">
+                        <div style="font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-users" style="color: #3b82f6;"></i>
+                            Buyurtma bergan bemorlar:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #10b981; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">1</span>
+                                <i class="fas fa-user" style="color: #3b82f6;"></i>
+                                <span style="color: #1f2937;">Aliyev Vali</span>
+                                <span style="color: #10b981; font-weight: 700; margin-left: auto;">40,000 so'm</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #3b82f6; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">2</span>
+                                <i class="fas fa-user" style="color: #3b82f6;"></i>
+                                <span style="color: #1f2937;">Toshmatov Sardor</span>
+                                <span style="color: #3b82f6; font-weight: 700; margin-left: auto;">145,000 so'm</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="background: #f59e0b; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;">3</span>
+                                <i class="fas fa-user" style="color: #3b82f6;"></i>
+                                <span style="color: #1f2937;">Rahimova Malika</span>
+                                <span style="color: #f59e0b; font-weight: 700; margin-left: auto;">35,000 so'm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; padding: 20px; border-top: 2px solid #f3f4f6;">
+                    <button onclick="document.getElementById('customReportModal').classList.remove('active')" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-check"></i> Yopish
+                    </button>
+                </div>
+            `;
+            
+            showCustomModal('Buyurtmalar Hisoboti', modalContent);
+        }
+
+        function showAverageReport() {
+            const modalContent = `
+                <div style="padding: 20px;">
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <div style="width: 80px; height: 80px; margin: 0 auto 15px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-line" style="font-size: 40px; color: white;"></i>
+                        </div>
+                        <h2 style="color: #1f2937; font-size: 24px;">
+                            <i class="fas fa-calculator"></i> O'rtacha Buyurtma
+                        </h2>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 25px; border-radius: 15px; margin-bottom: 25px; text-align: center;">
+                        <div style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 5px;">
+                            <i class="fas fa-money-bill-wave"></i> O'rtacha Qiymat
+                        </div>
+                        <div style="color: white; font-size: 36px; font-weight: 700;">51,100 so'm</div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 25px;">
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #10b981;">
+                            <i class="fas fa-arrow-up" style="font-size: 22px; color: #10b981; margin-bottom: 8px;"></i>
+                            <div style="font-size: 20px; font-weight: 700; color: #1f2937;">145K</div>
+                            <div style="font-size: 12px; color: #6b7280;">Eng yuqori</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #3b82f6;">
+                            <i class="fas fa-equals" style="font-size: 22px; color: #3b82f6; margin-bottom: 8px;"></i>
+                            <div style="font-size: 20px; font-weight: 700; color: #1f2937;">35K</div>
+                            <div style="font-size: 12px; color: #6b7280;">Mediana</div>
+                        </div>
+                        <div style="background: #f9fafb; padding: 18px; border-radius: 12px; text-align: center; border-left: 4px solid #ef4444;">
+                            <i class="fas fa-arrow-down" style="font-size: 22px; color: #ef4444; margin-bottom: 8px;"></i>
+                            <div style="font-size: 20px; font-weight: 700; color: #1f2937;">8.5K</div>
+                            <div style="font-size: 12px; color: #6b7280;">Eng past</div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-shopping-basket" style="color: #8b5cf6;"></i>
+                            Buyurtmadagi mahsulotlar:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-pills" style="color: #7c3aed; font-size: 18px;"></i>
+                                <strong style="color: #1f2937;">Dorilar soni:</strong>
+                                <span style="color: #7c3aed; font-weight: 700; margin-left: auto;">1.8 ta</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-boxes" style="color: #3b82f6; font-size: 18px;"></i>
+                                <strong style="color: #1f2937;">Jami buyurtmalar:</strong>
+                                <span style="color: #3b82f6; font-weight: 700; margin-left: auto;">5 ta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <div style="font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-stopwatch" style="color: #f59e0b;"></i>
+                            Buyurtma muddati:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-clipboard-check" style="color: #10b981; font-size: 16px;"></i>
+                                <span style="color: #1f2937;">Qabul:</span>
+                                <span style="color: #10b981; font-weight: 700; margin-left: auto;">2 daq</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-cogs" style="color: #3b82f6; font-size: 16px;"></i>
+                                <span style="color: #1f2937;">Tayyorlash:</span>
+                                <span style="color: #3b82f6; font-weight: 700; margin-left: auto;">8 daq</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-shipping-fast" style="color: #f59e0b; font-size: 16px;"></i>
+                                <span style="color: #1f2937;">Yetkazish:</span>
+                                <span style="color: #f59e0b; font-weight: 700; margin-left: auto;">5 daq</span>
+                            </div>
+                            <div style="border-top: 2px solid #e5e7eb; padding-top: 12px; margin-top: 5px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-clock" style="color: #7c3aed; font-size: 16px;"></i>
+                                <strong style="color: #1f2937;">Jami:</strong>
+                                <span style="color: #7c3aed; font-weight: 700; font-size: 18px; margin-left: auto;">15 daq</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 20px; border-radius: 12px;">
+                        <div style="font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-lightbulb" style="color: #f59e0b;"></i>
+                            Tavsiyalar:
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #10b981; margin-top: 2px;"></i>
+                                <span style="color: #1f2937;">Xizmat sifati yaxshi</span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #10b981; margin-top: 2px;"></i>
+                                <span style="color: #1f2937;">Tez yetkazish davom ettiring</span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 10px;">
+                                <i class="fas fa-check-circle" style="color: #10b981; margin-top: 2px;"></i>
+                                <span style="color: #1f2937;">Yangi dorilar qo'shing</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; padding: 20px; border-top: 2px solid #f3f4f6;">
+                    <button onclick="document.getElementById('customReportModal').classList.remove('active')" style="flex: 1; padding: 14px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fas fa-check"></i> Yopish
+                    </button>
+                </div>
+            `;
+            
+            showCustomModal('O\'rtacha Buyurtma Hisoboti', modalContent);
+        }
+
+        // Custom modal ko'rsatish
+        function showCustomModal(title, content) {
+            let modal = document.getElementById('customReportModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'customReportModal';
+                modal.className = 'modal';
+                document.body.appendChild(modal);
+            }
+            
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 700px;">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-file-alt"></i> ${title}</h2>
+                        <button class="modal-close" onclick="document.getElementById('customReportModal').classList.remove('active')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    ${content}
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        // Modal tashqarisiga bosilganda yopish
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                if (event.target.id === 'addMedicineModal') {
+                    closeModal('addMedicineModal');
+                } else if (event.target.id === 'viewOrderModal') {
+                    closeModal('viewOrderModal');
+                }
+            }
+        }
+        
+        // Sahifa yuklanganda mahsulotlarni yuklash
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Sahifa yuklandi');
+            
+            // Dorilarni LocalStorage dan yuklash
+            initializeMedicines();
+            
+            // Dorilar jadvalini yangilash
+            updateMedicinesTable();
+            
+            // Kassir tizimini boshlash
+            if (typeof loadMedicinesFromStorage === 'function') {
+                loadMedicinesFromStorage();
+                console.log('loadMedicinesFromStorage() chaqirildi');
+            }
+            
+            // Agar kassir bo'limi aktiv bo'lsa, mahsulotlarni yuklash
+            const cashierSection = document.getElementById('cashier');
+            if (cashierSection && cashierSection.classList.contains('active')) {
+                setTimeout(function() {
+                    if (typeof loadProducts === 'function') {
+                        loadProducts();
+                    }
+                }, 100);
+            }
+        });
+        
+        // LocalStorage o'zgarishlarini tinglash (boshqa tab/oynalardan)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'medcare_medicines') {
+                console.log('Dorilar boshqa oynada o\'zgartirildi');
+                initializeMedicines();
+                updateMedicinesTable();
+                if (typeof loadProducts === 'function') {
+                    loadProducts();
+                }
+            }
+        });
+        
+        // Dorilar yangilanganda qayta yuklash (o'sha sahifa ichida)
+        window.addEventListener('medicinesUpdated', function() {
+            console.log('Dorilar yangilandi eventi qabul qilindi');
+            initializeMedicines();
+            updateMedicinesTable();
+        });
+    </script>
+    <script src="../js/pharmacy-cashier.js"></script>
+</body>
+</html>

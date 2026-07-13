@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCare - Xususiy klinika</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="home-page">
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fas fa-hospital"></i></span>
+                    <div class="logo-text">
+                        <h1>MedCare</h1>
+                        <p>Xususiy klinika - Toshkent</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <a href="tel:+998712001010" class="phone"><i class="fas fa-phone-alt"></i> +998 71 200 10 10</a>
+                    <button class="btn-primary btn-appointment" onclick="location.href='pages/head-doctor.html'">
+                        <i class="fas fa-calendar-check"></i> Qabulga yozilish
+                    </button>
+                    <button class="btn-primary" style="background-color: #7c3aed; border-color: #7c3aed;" onclick="location.href='pages/login.html'">
+                        <i class="fas fa-user-shield"></i> Admin
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="nav-wrapper">
+            <div class="container">
+                <nav class="nav">
+                    <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Bosh sahifa</a>
+                    <a href="pages/patients.html" class="nav-link"><i class="fas fa-users"></i> Bemorlar</a>
+                    <a href="pages/doctors.html" class="nav-link"><i class="fas fa-user-md"></i> Xodimlar</a>
+                    <a href="pages/services.html" class="nav-link"><i class="fas fa-heartbeat"></i> Mutaxassislar</a>
+                    <a href="pages/head-doctor.html" class="nav-link"><i class="fas fa-stethoscope"></i> Bosh vrach</a>
+                    <a href="pages/pharmacy.html" class="nav-link"><i class="fas fa-pills"></i> Dorixona</a>
+                    <a href="pages/medical-history.html" class="nav-link"><i class="fas fa-file-medical"></i> Kasallik tarixi</a>
+                    <a href="pages/payment.html" class="nav-link"><i class="fas fa-credit-card"></i> To'lov</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Sog'liqingiz <span class="highlight">bizning ustuvor</span> vazifamiz</h2>
+                <p>MedCare xususiy klinikasi — zamonaviy tibbiy uskunalar, yuqori malakali mutaxassislar va individual yondashuvli bilan xizmat ko'rsatamiz sizning sog'ligingizni asraydi.</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-hero" onclick="location.href='pages/head-doctor.html'">
+                        <i class="fas fa-calendar-check"></i> Qabul belgilash
+                    </button>
+                    <button class="btn-secondary btn-hero" onclick="location.href='pages/about.html'">
+                        <i class="fas fa-info-circle"></i> Klinika haqida
+                    </button>
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3>15+</h3>
+                    <p>Yil tajriba</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                    <h3>52</h3>
+                    <p>Malakali shifokor</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <h3>25K+</h3>
+                    <p>Yillik bemorlar</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-hospital-alt"></i></div>
+                    <h3>14</h3>
+                    <p>Tibbiy bo'lim</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose">
+        <div class="container">
+            <h2 class="section-title">Nima uchun bizni tanlashadi?</h2>
+            <p class="section-subtitle">Professional jamoamiz va zamonaviy yondashuvimiz</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-user-md"></i></div>
+                    <h3>Tajribali shifokorlar</h3>
+                    <p>52 nafar yuqori malakali mutaxassis, 15+ yillik tajriba</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-microscope"></i></div>
+                    <h3>Zamonaviy uskunalar</h3>
+                    <p>Eng so'nggi texnologiyalar va diagnostika uskunalari</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h3>24/7 qo'llab-quvvatlash</h3>
+                    <p>Har doim siz bilan, tez yordam xizmati mavjud</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>ISO 9001:2015</h3>
+                    <p>Sifat menejmenti tizimi sertifikati</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-hand-holding-medical"></i></div>
+                    <h3>Individual yondashuv</h3>
+                    <p>Har bir bemor uchun maxsus davolash rejasi</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-credit-card"></i></div>
+                    <h3>Qulay to'lov</h3>
+                    <p>Turli to'lov usullari va kredit imkoniyati</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Departments Section -->
+    <section class="departments">
+        <div class="container">
+            <h2 class="section-title">Bizning bo'limlar</h2>
+            <p class="section-subtitle">14 ta tibbiy bo'lim va xizmatlar</p>
+            <div class="departments-grid">
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-heartbeat"></i>
+                    <h4>Kardiologiya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>Nevrologiya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-x-ray"></i>
+                    <h4>Diagnostika</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-microscope"></i>
+                    <h4>Laboratoriya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-baby"></i>
+                    <h4>Pediatriya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-tooth"></i>
+                    <h4>Stomatologiya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-syringe"></i>
+                    <h4>Endokrinologiya</h4>
+                </a>
+                <a href="pages/services.html" class="dept-card">
+                    <i class="fas fa-procedures"></i>
+                    <h4>Jarrohlik</h4>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Sog'ligingiz bizning ustuvorimiz</h2>
+                <p>Bugun qabulga yoziling va professional maslahat oling</p>
+                <button class="btn-primary btn-hero" onclick="location.href='pages/head-doctor.html'">
+                    <i class="fas fa-phone-alt"></i> Hozir bog'laning
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <span class="logo-icon"><i class="fas fa-hospital"></i></span>
+                        <h3>MedCare Klinikasi</h3>
+                    </div>
+                    <p>Sog'ligingiz saqlash — bizning ishimiz va mas'uliyatimiz. Zamonaviy tibbiyot va asosiy g'amxo'rlik bilan xizmat ko'rsatamiz.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Tezkor havolalar</h4>
+                    <ul class="footer-links">
+                        <li><a href="pages/head-doctor.html">Bosh vrach</a></li>
+                        <li><a href="pages/patients.html">Bemorlar</a></li>
+                        <li><a href="pages/doctors.html">Shifokorlar</a></li>
+                        <li><a href="pages/services.html">Xizmatlar</a></li>
+                        <li><a href="pages/medical-history.html">Kasallik tarixi</a></li>
+                        <li><a href="pages/payment.html">To'lov</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Xizmatlar</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Diagnostika</a></li>
+                        <li><a href="#">Laboratoriya</a></li>
+                        <li><a href="#">Kardiologiya</a></li>
+                        <li><a href="#">Nevrologiya</a></li>
+                        <li><a href="#">Terapiya</a></li>
+                        <li><a href="#">Onlayn qabul</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Aloqa</h4>
+                    <ul class="footer-contact">
+                        <li>
+                            <strong><i class="fas fa-map-marker-alt"></i> Manzil:</strong><br>
+                            Toshkent sh., Yunusobod tumani, Amir Temur ko'chasi, 108-uy
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-phone"></i> Telefon:</strong><br>
+                            +998 71 200 10 10<br>
+                            +998 90 100 20 30
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-globe"></i> Veb-sayt:</strong><br>
+                            www.medcare.uz
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-envelope"></i> Email:</strong><br>
+                            info@medcare.uz
+                        </li>
+                        <li>
+                            <strong><i class="fas fa-clock"></i> Ish vaqti:</strong><br>
+                            Dush-Shan: 08:00-20:00<br>
+                            Yakshanba: 09:00-15:00
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 MedCare Xususiy Klinikasi. Barcha huquqlar himoyalangan</p>
+                <div class="social-links">
+                    <a href="#" title="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

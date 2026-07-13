@@ -1,0 +1,491 @@
+{
+  "database_name": "medcare_clinic",
+  "version": "1.0.0",
+  "created": "2025-06-06",
+  
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin",
+      "full_name": "Administrator",
+      "email": "admin@medcare.uz",
+      "phone": "+998 71 200 10 10",
+      "status": "active",
+      "created_at": "2025-01-01 10:00:00"
+    },
+    {
+      "id": 2,
+      "username": "doctor",
+      "password": "doctor123",
+      "role": "doctor",
+      "full_name": "Dr. Shifokor",
+      "email": "doctor@medcare.uz",
+      "phone": "+998 71 200 10 11",
+      "status": "active",
+      "created_at": "2025-01-01 10:00:00"
+    },
+    {
+      "id": 3,
+      "username": "pharmacy",
+      "password": "pharmacy123",
+      "role": "pharmacy",
+      "full_name": "Qodirov Jahongir",
+      "email": "pharmacy@medcare.uz",
+      "phone": "+998 90 555 66 77",
+      "status": "active",
+      "created_at": "2025-01-01 10:00:00"
+    }
+  ],
+
+  "patients": [
+    {
+      "id": 1,
+      "patient_id": "P-001",
+      "full_name": "Aliyev Vali Jonovich",
+      "birth_date": "1985-03-15",
+      "phone": "+998 90 123 45 67",
+      "address": "Toshkent sh., Chilonzor tumani",
+      "diagnosis": "Arterial gipertenziya",
+      "status": "active",
+      "created_at": "2025-01-15 09:30:00",
+      "updated_at": "2025-06-06 14:30:00"
+    },
+    {
+      "id": 2,
+      "patient_id": "P-002",
+      "full_name": "Rahimova Malika Akramovna",
+      "birth_date": "1990-07-22",
+      "phone": "+998 91 234 56 78",
+      "address": "Toshkent sh., Yunusobod tumani",
+      "diagnosis": "Migren",
+      "status": "active",
+      "created_at": "2025-02-10 10:15:00",
+      "updated_at": "2025-06-06 15:00:00"
+    },
+    {
+      "id": 3,
+      "patient_id": "P-003",
+      "full_name": "Toshmatov Sardor Anvarovich",
+      "birth_date": "1978-11-10",
+      "phone": "+998 93 345 67 89",
+      "address": "Toshkent sh., Yakkasaroy tumani",
+      "diagnosis": "Qandli diabet 2-tur",
+      "status": "active",
+      "created_at": "2025-01-20 11:00:00",
+      "updated_at": "2025-06-06 15:30:00"
+    },
+    {
+      "id": 4,
+      "patient_id": "P-004",
+      "full_name": "Hasanova Aziza Shavkatovna",
+      "birth_date": "1995-08-05",
+      "phone": "+998 94 456 78 90",
+      "address": "Toshkent sh., Sergeli tumani",
+      "diagnosis": "Bronxial astma",
+      "status": "active",
+      "created_at": "2025-03-05 13:45:00",
+      "updated_at": "2025-06-06 16:00:00"
+    }
+  ],
+
+  "doctors": [
+    {
+      "id": 1,
+      "doctor_id": "D-001",
+      "full_name": "Dr. Karimov Javohir",
+      "specialty": "Kardiolog",
+      "phone": "+998 90 111 22 33",
+      "email": "karimov@medcare.uz",
+      "experience_years": 15,
+      "status": "active",
+      "created_at": "2025-01-01 08:00:00"
+    },
+    {
+      "id": 2,
+      "doctor_id": "D-002",
+      "full_name": "Dr. Shukurova Dilnoza",
+      "specialty": "Nevrolog",
+      "phone": "+998 91 222 33 44",
+      "email": "shukurova@medcare.uz",
+      "experience_years": 12,
+      "status": "active",
+      "created_at": "2025-01-01 08:00:00"
+    },
+    {
+      "id": 3,
+      "doctor_id": "D-003",
+      "full_name": "Dr. Abdullayev Otabek",
+      "specialty": "Terapevt",
+      "phone": "+998 93 333 44 55",
+      "email": "abdullayev@medcare.uz",
+      "experience_years": 10,
+      "status": "active",
+      "created_at": "2025-01-01 08:00:00"
+    },
+    {
+      "id": 4,
+      "doctor_id": "D-004",
+      "full_name": "Dr. Yusupova Nodira",
+      "specialty": "Pediatr",
+      "phone": "+998 94 444 55 66",
+      "email": "yusupova@medcare.uz",
+      "experience_years": 8,
+      "status": "active",
+      "created_at": "2025-01-01 08:00:00"
+    }
+  ],
+
+  "appointments": [
+    {
+      "id": 1,
+      "appointment_id": "Q-001",
+      "patient_id": 1,
+      "doctor_id": 1,
+      "department": "Kardiologiya",
+      "appointment_date": "2025-06-06",
+      "appointment_time": "14:30:00",
+      "status": "completed",
+      "notes": "Qon bosimi tekshiruvi",
+      "created_at": "2025-06-05 10:00:00"
+    },
+    {
+      "id": 2,
+      "appointment_id": "Q-002",
+      "patient_id": 2,
+      "doctor_id": 2,
+      "department": "Nevrologiya",
+      "appointment_date": "2025-06-06",
+      "appointment_time": "15:00:00",
+      "status": "pending",
+      "notes": "Bosh og'rig'i shikoyati",
+      "created_at": "2025-06-05 11:30:00"
+    },
+    {
+      "id": 3,
+      "appointment_id": "Q-003",
+      "patient_id": 3,
+      "doctor_id": 3,
+      "department": "Terapiya",
+      "appointment_date": "2025-06-06",
+      "appointment_time": "15:30:00",
+      "status": "pending",
+      "notes": "Umumiy ko'rik",
+      "created_at": "2025-06-05 12:00:00"
+    },
+    {
+      "id": 4,
+      "appointment_id": "Q-004",
+      "patient_id": 4,
+      "doctor_id": 4,
+      "department": "Pediatriya",
+      "appointment_date": "2025-06-06",
+      "appointment_time": "16:00:00",
+      "status": "completed",
+      "notes": "Bola tekshiruvi",
+      "created_at": "2025-06-05 13:00:00"
+    },
+    {
+      "id": 5,
+      "appointment_id": "Q-005",
+      "patient_id": 1,
+      "doctor_id": 1,
+      "department": "Kardiologiya",
+      "appointment_date": "2025-06-07",
+      "appointment_time": "09:00:00",
+      "status": "pending",
+      "notes": "Qayta ko'rik",
+      "created_at": "2025-06-06 10:00:00"
+    }
+  ],
+
+  "medicines": [
+    {
+      "id": 1,
+      "name": "Metformin 500mg",
+      "category": "Antidiabetik",
+      "quantity_per_package": "60 dona/quti",
+      "price": 18000,
+      "stock": 45,
+      "description": "Qandli diabet 2-tur uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Lisinopril 10mg",
+      "category": "Gipotonziv",
+      "quantity_per_package": "30 dona/quti",
+      "price": 22000,
+      "stock": 120,
+      "description": "Yuqori qon bosimi uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 3,
+      "name": "Amoksisillin 500mg",
+      "category": "Antibiotik",
+      "quantity_per_package": "20 dona/quti",
+      "price": 35000,
+      "stock": 8,
+      "description": "Bakterial infeksiyalar uchun",
+      "status": "low_stock",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Omeprazol 20mg",
+      "category": "Antiulser",
+      "quantity_per_package": "14 dona/quti",
+      "price": 15000,
+      "stock": 85,
+      "description": "Oshqozon kasalliklari uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 5,
+      "name": "Insulin Glargin",
+      "category": "Insulin",
+      "quantity_per_package": "5 ml/flakon",
+      "price": 120000,
+      "stock": 15,
+      "description": "Qandli diabet 1-tur uchun",
+      "status": "low_stock",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 6,
+      "name": "Paracetamol 500mg",
+      "category": "Og'riq qoldiruvchi",
+      "quantity_per_package": "20 dona/quti",
+      "price": 8500,
+      "stock": 200,
+      "description": "Harorat va og'riq uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 7,
+      "name": "Vitamin D3 2000IU",
+      "category": "Vitamin",
+      "quantity_per_package": "60 dona/quti",
+      "price": 25000,
+      "stock": 110,
+      "description": "Vitamin yetishmasligi uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    },
+    {
+      "id": 8,
+      "name": "Aspirin 100mg",
+      "category": "Qon suyuqlashtiruvchi",
+      "quantity_per_package": "56 dona/quti",
+      "price": 12000,
+      "stock": 90,
+      "description": "Qon ivishini oldini olish uchun",
+      "status": "available",
+      "created_at": "2025-01-01 09:00:00"
+    }
+  ],
+
+  "pharmacy_orders": [
+    {
+      "id": 1,
+      "order_number": "B-001",
+      "patient_id": 1,
+      "patient_name": "Aliyev Vali",
+      "room": "A-305",
+      "phone": "+998 90 123 45 67",
+      "products": "Metformin, Lisinopril",
+      "amount": 40000,
+      "status": "delivered",
+      "notes": "Tezkor yetkazib berish",
+      "order_date": "2025-06-06 14:30:00",
+      "delivered_date": "2025-06-06 14:50:00"
+    },
+    {
+      "id": 2,
+      "order_number": "B-002",
+      "patient_id": 2,
+      "patient_name": "Rahimova Malika",
+      "room": "B-212",
+      "phone": "+998 91 234 56 78",
+      "products": "Amoksisillin",
+      "amount": 35000,
+      "status": "pending",
+      "notes": "",
+      "order_date": "2025-06-06 15:00:00",
+      "delivered_date": null
+    },
+    {
+      "id": 3,
+      "order_number": "B-003",
+      "patient_id": 3,
+      "patient_name": "Toshmatov Sardor",
+      "room": "C-408",
+      "phone": "+998 93 345 67 89",
+      "products": "Insulin, Vitamin D3",
+      "amount": 145000,
+      "status": "delivered",
+      "notes": "Muzlatgichda saqlash",
+      "order_date": "2025-06-06 16:20:00",
+      "delivered_date": "2025-06-06 16:40:00"
+    },
+    {
+      "id": 4,
+      "order_number": "B-004",
+      "patient_id": 4,
+      "patient_name": "Hasanova Aziza",
+      "room": "D-115",
+      "phone": "+998 94 456 78 90",
+      "products": "Paracetamol",
+      "amount": 8500,
+      "status": "pending",
+      "notes": "",
+      "order_date": "2025-06-06 17:00:00",
+      "delivered_date": null
+    },
+    {
+      "id": 5,
+      "order_number": "B-005",
+      "patient_id": 1,
+      "patient_name": "Mirzayev Jamshid",
+      "room": "A-201",
+      "phone": "+998 95 567 89 01",
+      "products": "Aspirin, Omeprazol",
+      "amount": 27000,
+      "status": "pending",
+      "notes": "",
+      "order_date": "2025-06-06 18:15:00",
+      "delivered_date": null
+    }
+  ],
+
+  "payments_income": [
+    {
+      "id": 1,
+      "income_id": "K-001",
+      "patient_name": "Aliyev Vali",
+      "service_type": "Kardiologiya konsultatsiya",
+      "amount": 250000,
+      "payment_method": "Click",
+      "payment_date": "2025-06-06 14:30:00",
+      "status": "completed"
+    },
+    {
+      "id": 2,
+      "income_id": "K-002",
+      "patient_name": "Rahimova Malika",
+      "service_type": "MRI tekshiruvi",
+      "amount": 850000,
+      "payment_method": "Payme",
+      "payment_date": "2025-06-06 15:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 3,
+      "income_id": "K-003",
+      "patient_name": "Toshmatov Sardor",
+      "service_type": "Qon tahlili",
+      "amount": 150000,
+      "payment_method": "Naqd",
+      "payment_date": "2025-06-06 15:30:00",
+      "status": "completed"
+    },
+    {
+      "id": 4,
+      "income_id": "K-004",
+      "patient_name": "Hasanova Aziza",
+      "service_type": "Pediatr konsultatsiya",
+      "amount": 200000,
+      "payment_method": "UzCard",
+      "payment_date": "2025-06-06 16:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 5,
+      "income_id": "K-005",
+      "patient_name": "Mirzayev Jamshid",
+      "service_type": "EKG tekshiruvi",
+      "amount": 180000,
+      "payment_method": "Click",
+      "payment_date": "2025-06-06 16:30:00",
+      "status": "completed"
+    }
+  ],
+
+  "payments_expense": [
+    {
+      "id": 1,
+      "expense_id": "CH-001",
+      "description": "Dorilar xaridi",
+      "category": "Dorixona",
+      "amount": 12500000,
+      "payment_method": "Bank o'tkazma",
+      "payment_date": "2025-06-05 10:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 2,
+      "expense_id": "CH-002",
+      "description": "Tibbiy asboblar",
+      "category": "Uskunalar",
+      "amount": 8200000,
+      "payment_method": "Bank o'tkazma",
+      "payment_date": "2025-06-04 14:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 3,
+      "expense_id": "CH-003",
+      "description": "Xodimlar maoshi",
+      "category": "Ish haqi",
+      "amount": 45000000,
+      "payment_method": "Bank o'tkazma",
+      "payment_date": "2025-06-01 09:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 4,
+      "expense_id": "CH-004",
+      "description": "Kommunal xizmatlar",
+      "category": "Xarajatlar",
+      "amount": 3500000,
+      "payment_method": "Naqd",
+      "payment_date": "2025-06-01 11:00:00",
+      "status": "completed"
+    },
+    {
+      "id": 5,
+      "expense_id": "CH-005",
+      "description": "Laboratoriya reagentlari",
+      "category": "Uskunalar",
+      "amount": 5800000,
+      "payment_method": "Bank o'tkazma",
+      "payment_date": "2025-06-03 13:00:00",
+      "status": "completed"
+    }
+  ],
+
+  "clinic_info": {
+    "name": "MedCare Xususiy Klinikasi",
+    "address": "Toshkent sh., Yunusobod tumani, Amir Temur ko'chasi, 108-uy",
+    "phone": "+998 71 200 10 10",
+    "phone_2": "+998 90 100 20 30",
+    "email": "info@medcare.uz",
+    "website": "www.medcare.uz",
+    "working_hours": {
+      "weekdays": "08:00 - 20:00",
+      "sunday": "09:00 - 15:00"
+    },
+    "pharmacy": {
+      "location": "A Bino, 1-qavat, 105-xona",
+      "manager": "Farmatsevt Qodirov Jahongir",
+      "phone": "+998 90 555 66 77",
+      "working_hours": "08:00 - 20:00 (har kuni)"
+    }
+  }
+}

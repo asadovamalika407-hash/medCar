@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f3f4f6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+            color: white;
+            padding: 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 30px 25px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-logo i {
+            font-size: 40px;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 24px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            margin-bottom: 3px;
+        }
+
+        .user-details p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 16px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #60a5fa;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left-color: white;
+        }
+
+        .menu-item i {
+            font-size: 20px;
+            width: 25px;
+        }
+
+        .logout-btn {
+            margin: 20px 25px;
+            padding: 14px;
+            background: rgba(239, 68, 68, 0.2);
+            color: white;
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title i {
+            color: #2563eb;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-action {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .stat-icon.blue { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .stat-icon.green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .stat-icon.orange { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+
+        .stat-details h3 {
+            font-size: 32px;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .stat-details p {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Content Section */
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table thead {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+        }
+
+        .data-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .data-table td {
+            padding: 15px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete, .btn-view {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-edit {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-edit:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-view {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .btn-view:hover {
+            background: #059669;
+            color: white;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge.active {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge.inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 15px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 10px;
+            border-left: 4px solid #2563eb;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            color: #1f2937;
+            font-weight: 500;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-row label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus,
+        .form-row textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .btn-save {
+            flex: 1;
+            padding: 14px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 14px;
+            background: #f3f4f6;
+            color: #4b5563;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-280px);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-hospital"></i>
+                <h1>MedCare</h1>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="user-details">
+                    <h3 id="userName">Administrator</h3>
+                    <p id="userRole">Admin</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-menu">
+            <a class="menu-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="menu-item" onclick="showSection('patients')">
+                <i class="fas fa-users"></i>
+                <span>Bemorlar</span>
+            </a>
+            <a class="menu-item" onclick="showSection('doctors')">
+                <i class="fas fa-user-md"></i>
+                <span>Shifokorlar</span>
+            </a>
+            <a class="menu-item" onclick="showSection('appointments')">
+                <i class="fas fa-calendar-check"></i>
+                <span>Qabullar</span>
+            </a>
+            <a class="menu-item" onclick="showSection('pharmacy')">
+                <i class="fas fa-pills"></i>
+                <span>Dorixona</span>
+            </a>
+            <a class="menu-item" onclick="showSection('payments')">
+                <i class="fas fa-credit-card"></i>
+                <span>To'lovlar</span>
+            </a>
+            <a class="menu-item" onclick="showSection('reports')">
+                <i class="fas fa-file-chart-line"></i>
+                <span>Hisobotlar</span>
+            </a>
+            <a class="menu-item" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i>
+                <span>Sozlamalar</span>
+            </a>
+            <a class="menu-item" href="hr-dashboard.html">
+                <i class="fas fa-users-cog"></i>
+                <span>HR Tizimi</span>
+            </a>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            Chiqish
+        </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title">
+                <i class="fas fa-tachometer-alt"></i>
+                <span id="pageTitle">Dashboard</span>
+            </div>
+            <div class="top-actions">
+                <button class="btn-action" onclick="window.location.href='../index.html'">
+                    <i class="fas fa-home"></i>
+                    Bosh sahifa
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="content-section active" id="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>1,248</h3>
+                        <p>Jami bemorlar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>52</h3>
+                        <p>Shifokorlar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>186</h3>
+                        <p>Bugungi qabullar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>45.2M</h3>
+                        <p>Oylik daromad</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+                <h2 style="margin-bottom: 20px; color: #1f2937;">
+                    <i class="fas fa-chart-bar"></i> Oxirgi faoliyat
+                </h2>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Bemor</th>
+                            <th>Shifokor</th>
+                            <th>Bo'lim</th>
+                            <th>Sana</th>
+                            <th>Holat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Aliyev Vali</td>
+                            <td>Dr. Karimov</td>
+                            <td>Kardiologiya</td>
+                            <td>2025-06-06 14:30</td>
+                            <td><span class="badge active">Bajarildi</span></td>
+                        </tr>
+                        <tr>
+                            <td>Rahimova Malika</td>
+                            <td>Dr. Shukurova</td>
+                            <td>Nevrologiya</td>
+                            <td>2025-06-06 15:00</td>
+                            <td><span class="badge pending">Kutilmoqda</span></td>
+                        </tr>
+                        <tr>
+                            <td>Toshmatov Sardor</td>
+                            <td>Dr. Abdullayev</td>
+                            <td>Terapiya</td>
+                            <td>2025-06-06 15:30</td>
+                            <td><span class="badge pending">Kutilmoqda</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Patients Section -->
+        <div class="content-section" id="patients">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Bemorlar ro'yxati</h2>
+                <button class="btn-action">
+                    <i class="fas fa-plus"></i> Yangi bemor
+                </button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>F.I.O.</th>
+                        <th>Tug'ilgan sana</th>
+                        <th>Telefon</th>
+                        <th>Holat</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>P-001</td>
+                        <td>Aliyev Vali Jonovich</td>
+                        <td>15.03.1985</td>
+                        <td>+998 90 123 45 67</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewPatient(1)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editPatient(1)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deletePatient(1)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>P-002</td>
+                        <td>Rahimova Malika Akramovna</td>
+                        <td>22.07.1990</td>
+                        <td>+998 91 234 56 78</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewPatient(2)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editPatient(2)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deletePatient(2)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>P-003</td>
+                        <td>Toshmatov Sardor Anvarovich</td>
+                        <td>10.11.1978</td>
+                        <td>+998 93 345 67 89</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewPatient(3)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editPatient(3)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deletePatient(3)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>P-004</td>
+                        <td>Hasanova Aziza Shavkatovna</td>
+                        <td>05.08.1995</td>
+                        <td>+998 94 456 78 90</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewPatient(4)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editPatient(4)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deletePatient(4)">O'chirish</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Doctors Section -->
+        <div class="content-section" id="doctors">
+            <div class="section-header">
+                <h2><i class="fas fa-user-md"></i> Shifokorlar ro'yxati</h2>
+                <button class="btn-action">
+                    <i class="fas fa-plus"></i> Yangi shifokor
+                </button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>F.I.O.</th>
+                        <th>Mutaxassislik</th>
+                        <th>Telefon</th>
+                        <th>Holat</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>D-001</td>
+                        <td>Dr. Karimov Javohir</td>
+                        <td>Kardiolog</td>
+                        <td>+998 90 111 22 33</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewDoctor(1)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editDoctor(1)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteDoctor(1)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D-002</td>
+                        <td>Dr. Shukurova Dilnoza</td>
+                        <td>Nevrolog</td>
+                        <td>+998 91 222 33 44</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewDoctor(2)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editDoctor(2)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteDoctor(2)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D-003</td>
+                        <td>Dr. Abdullayev Otabek</td>
+                        <td>Terapevt</td>
+                        <td>+998 93 333 44 55</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewDoctor(3)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editDoctor(3)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteDoctor(3)">O'chirish</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D-004</td>
+                        <td>Dr. Yusupova Nodira</td>
+                        <td>Pediatr</td>
+                        <td>+998 94 444 55 66</td>
+                        <td><span class="badge active">Faol</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewDoctor(4)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editDoctor(4)">Tahrirlash</button>
+                            <button class="btn-delete" onclick="deleteDoctor(4)">O'chirish</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Other sections placeholders -->
+        <div class="content-section" id="appointments">
+            <div class="section-header">
+                <h2><i class="fas fa-calendar-check"></i> Qabullar ro'yxati</h2>
+                <button class="btn-action" onclick="addAppointment()">
+                    <i class="fas fa-plus"></i> Yangi qabul
+                </button>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bemor</th>
+                        <th>Shifokor</th>
+                        <th>Bo'lim</th>
+                        <th>Sana & Vaqt</th>
+                        <th>Holat</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Q-001</td>
+                        <td>Aliyev Vali Jonovich</td>
+                        <td>Dr. Karimov Javohir</td>
+                        <td>Kardiologiya</td>
+                        <td>06.06.2025 14:30</td>
+                        <td><span class="badge active">Bajarildi</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewAppointment(1)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editAppointment(1)">Tahrirlash</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Q-002</td>
+                        <td>Rahimova Malika Akramovna</td>
+                        <td>Dr. Shukurova Dilnoza</td>
+                        <td>Nevrologiya</td>
+                        <td>06.06.2025 15:00</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewAppointment(2)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editAppointment(2)">Tahrirlash</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Q-003</td>
+                        <td>Toshmatov Sardor Anvarovich</td>
+                        <td>Dr. Abdullayev Otabek</td>
+                        <td>Terapiya</td>
+                        <td>06.06.2025 15:30</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewAppointment(3)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editAppointment(3)">Tahrirlash</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Q-004</td>
+                        <td>Hasanova Aziza Shavkatovna</td>
+                        <td>Dr. Yusupova Nodira</td>
+                        <td>Pediatriya</td>
+                        <td>06.06.2025 16:00</td>
+                        <td><span class="badge active">Bajarildi</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewAppointment(4)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editAppointment(4)">Tahrirlash</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Q-005</td>
+                        <td>Mirzayev Jamshid Olimovich</td>
+                        <td>Dr. Karimov Javohir</td>
+                        <td>Kardiologiya</td>
+                        <td>07.06.2025 09:00</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewAppointment(5)">Ko'rish</button>
+                            <button class="btn-edit" onclick="editAppointment(5)">Tahrirlash</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section" id="pharmacy">
+            <div class="section-header">
+                <h2><i class="fas fa-pills"></i> Dorixona boshqaruvi</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-action" onclick="window.location.href='pharmacy-admin.html'">
+                        <i class="fas fa-hospital"></i> Dorixona paneli
+                    </button>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); padding: 30px; border-radius: 15px; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: #1e40af;">
+                    <i class="fas fa-info-circle"></i> Dorixona ma'lumotlari
+                </h3>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-map-marker-alt"></i> Joylashuvi:</div>
+                        <div class="info-value">A Bino, 1-qavat, 105-xona</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-user-tie"></i> Dorixona egasi:</div>
+                        <div class="info-value">Farmatsevt Qodirov Jahongir</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-phone"></i> Telefon:</div>
+                        <div class="info-value">+998 90 555 66 77</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-clock"></i> Ish vaqti:</div>
+                        <div class="info-value">08:00 - 20:00 (har kuni)</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-key"></i> Login:</div>
+                        <div class="info-value"><strong>pharmacy</strong></div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label"><i class="fas fa-lock"></i> Parol:</div>
+                        <div class="info-value"><strong>pharmacy123</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px; color: #1f2937;">
+                <i class="fas fa-shopping-cart"></i> So'nggi buyurtmalar
+            </h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bemor</th>
+                        <th>Palata</th>
+                        <th>Mahsulotlar</th>
+                        <th>Summa</th>
+                        <th>Holat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>B-001</td>
+                        <td>Aliyev Vali</td>
+                        <td>A-305</td>
+                        <td>Metformin, Lisinopril</td>
+                        <td>40,000 so'm</td>
+                        <td><span class="badge active">Yetkazildi</span></td>
+                    </tr>
+                    <tr>
+                        <td>B-002</td>
+                        <td>Rahimova Malika</td>
+                        <td>B-212</td>
+                        <td>Amoksisillin</td>
+                        <td>35,000 so'm</td>
+                        <td><span class="badge pending">Jarayonda</span></td>
+                    </tr>
+                    <tr>
+                        <td>B-003</td>
+                        <td>Toshmatov Sardor</td>
+                        <td>C-408</td>
+                        <td>Insulin, Vitamin D3</td>
+                        <td>145,000 so'm</td>
+                        <td><span class="badge active">Yetkazildi</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section" id="payments">
+            <div class="section-header">
+                <h2><i class="fas fa-credit-card"></i> Moliyaviy hisobotlar</h2>
+                <button class="btn-action" onclick="addPayment()">
+                    <i class="fas fa-plus"></i> Yangi to'lov
+                </button>
+            </div>
+
+            <!-- Statistika -->
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>125.4M</h3>
+                        <p>Jami kirim (oylik)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>78.2M</h3>
+                        <p>Jami chiqim (oylik)</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3>47.2M</h3>
+                        <p>Sof foyda</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kirimlar jadvali -->
+            <h3 style="margin-bottom: 20px; color: #1f2937;">
+                <i class="fas fa-arrow-circle-up"></i> Kirimlar
+            </h3>
+            <table class="data-table" style="margin-bottom: 30px;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Bemor</th>
+                        <th>Xizmat turi</th>
+                        <th>Sana</th>
+                        <th>Summa</th>
+                        <th>To'lov turi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>K-001</td>
+                        <td>Aliyev Vali</td>
+                        <td>Kardiologiya konsultatsiya</td>
+                        <td>06.06.2025</td>
+                        <td style="color: #10b981; font-weight: 700;">+250,000 so'm</td>
+                        <td>Click</td>
+                    </tr>
+                    <tr>
+                        <td>K-002</td>
+                        <td>Rahimova Malika</td>
+                        <td>MRI tekshiruvi</td>
+                        <td>06.06.2025</td>
+                        <td style="color: #10b981; font-weight: 700;">+850,000 so'm</td>
+                        <td>Payme</td>
+                    </tr>
+                    <tr>
+                        <td>K-003</td>
+                        <td>Toshmatov Sardor</td>
+                        <td>Qon tahlili</td>
+                        <td>06.06.2025</td>
+                        <td style="color: #10b981; font-weight: 700;">+150,000 so'm</td>
+                        <td>Naqd</td>
+                    </tr>
+                    <tr>
+                        <td>K-004</td>
+                        <td>Hasanova Aziza</td>
+                        <td>Pediatr konsultatsiya</td>
+                        <td>06.06.2025</td>
+                        <td style="color: #10b981; font-weight: 700;">+200,000 so'm</td>
+                        <td>UzCard</td>
+                    </tr>
+                    <tr>
+                        <td>K-005</td>
+                        <td>Mirzayev Jamshid</td>
+                        <td>EKG tekshiruvi</td>
+                        <td>06.06.2025</td>
+                        <td style="color: #10b981; font-weight: 700;">+180,000 so'm</td>
+                        <td>Click</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Chiqimlar jadvali -->
+            <h3 style="margin-bottom: 20px; color: #1f2937;">
+                <i class="fas fa-arrow-circle-down"></i> Chiqimlar
+            </h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tavsif</th>
+                        <th>Kategoriya</th>
+                        <th>Sana</th>
+                        <th>Summa</th>
+                        <th>To'lov turi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CH-001</td>
+                        <td>Dorilar xaridi</td>
+                        <td>Dorixona</td>
+                        <td>05.06.2025</td>
+                        <td style="color: #ef4444; font-weight: 700;">-12,500,000 so'm</td>
+                        <td>Bank o'tkazma</td>
+                    </tr>
+                    <tr>
+                        <td>CH-002</td>
+                        <td>Tibbiy asboblar</td>
+                        <td>Uskunalar</td>
+                        <td>04.06.2025</td>
+                        <td style="color: #ef4444; font-weight: 700;">-8,200,000 so'm</td>
+                        <td>Bank o'tkazma</td>
+                    </tr>
+                    <tr>
+                        <td>CH-003</td>
+                        <td>Xodimlar maoshi</td>
+                        <td>Ish haqi</td>
+                        <td>01.06.2025</td>
+                        <td style="color: #ef4444; font-weight: 700;">-45,000,000 so'm</td>
+                        <td>Bank o'tkazma</td>
+                    </tr>
+                    <tr>
+                        <td>CH-004</td>
+                        <td>Kommunal xizmatlar</td>
+                        <td>Xarajatlar</td>
+                        <td>01.06.2025</td>
+                        <td style="color: #ef4444; font-weight: 700;">-3,500,000 so'm</td>
+                        <td>Naqd</td>
+                    </tr>
+                    <tr>
+                        <td>CH-005</td>
+                        <td>Laboratoriya reagentlari</td>
+                        <td>Uskunalar</td>
+                        <td>03.06.2025</td>
+                        <td style="color: #ef4444; font-weight: 700;">-5,800,000 so'm</td>
+                        <td>Bank o'tkazma</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="content-section" id="reports">
+            <h2><i class="fas fa-file-chart-line"></i> Hisobotlar</h2>
+            <p style="color: #6b7280; margin-top: 20px;">Hisobotlar bu yerda ko'rsatiladi...</p>
+        </div>
+
+        <div class="content-section" id="settings">
+            <h2><i class="fas fa-cog"></i> Sozlamalar</h2>
+            <p style="color: #6b7280; margin-top: 20px;">Tizim sozlamalari bu yerda ko'rsatiladi...</p>
+        </div>
+    </div>
+
+    <!-- View Patient Modal -->
+    <div class="modal" id="viewPatientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user"></i> Bemor ma'lumotlari</h2>
+                <button class="modal-close" onclick="closeModal('viewPatientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid" id="patientInfoGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Patient Modal -->
+    <div class="modal" id="editPatientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Bemorni tahrirlash</h2>
+                <button class="modal-close" onclick="closeModal('editPatientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-grid" id="editPatientForm" onsubmit="savePatient(event)">
+                    <div class="form-row">
+                        <label><i class="fas fa-id-card"></i> Bemor ID</label>
+                        <input type="text" id="editPatientId" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-user"></i> F.I.O. *</label>
+                        <input type="text" id="editPatientName" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-birthday-cake"></i> Tug'ilgan sana *</label>
+                        <input type="date" id="editPatientBirth" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-phone"></i> Telefon *</label>
+                        <input type="tel" id="editPatientPhone" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-map-marker-alt"></i> Manzil</label>
+                        <input type="text" id="editPatientAddress">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-notes-medical"></i> Diagnosis</label>
+                        <textarea id="editPatientDiagnosis" rows="3"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-toggle-on"></i> Holat *</label>
+                        <select id="editPatientStatus" required>
+                            <option value="active">Faol</option>
+                            <option value="inactive">Nofaol</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Saqlash
+                        </button>
+                        <button type="button" class="btn-cancel" onclick="closeModal('editPatientModal')">
+                            Bekor qilish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Doctor Modal -->
+    <div class="modal" id="viewDoctorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-md"></i> Shifokor ma'lumotlari</h2>
+                <button class="modal-close" onclick="closeModal('viewDoctorModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="info-grid" id="doctorInfoGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Doctor Modal -->
+    <div class="modal" id="editDoctorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Shifokorni tahrirlash</h2>
+                <button class="modal-close" onclick="closeModal('editDoctorModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-grid" id="editDoctorForm" onsubmit="saveDoctor(event)">
+                    <div class="form-row">
+                        <label><i class="fas fa-id-card"></i> Shifokor ID</label>
+                        <input type="text" id="editDoctorId" readonly style="background: #f3f4f6;">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-user-md"></i> F.I.O. *</label>
+                        <input type="text" id="editDoctorName" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-stethoscope"></i> Mutaxassislik *</label>
+                        <input type="text" id="editDoctorSpecialty" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-phone"></i> Telefon *</label>
+                        <input type="tel" id="editDoctorPhone" required>
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="editDoctorEmail">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-calendar"></i> Ish tajribasi (yil)</label>
+                        <input type="number" id="editDoctorExperience" min="0">
+                    </div>
+                    <div class="form-row">
+                        <label><i class="fas fa-toggle-on"></i> Holat *</label>
+                        <select id="editDoctorStatus" required>
+                            <option value="active">Faol</option>
+                            <option value="inactive">Nofaol</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-save">
+                            <i class="fas fa-save"></i> Saqlash
+                        </button>
+                        <button type="button" class="btn-cancel" onclick="closeModal('editDoctorModal')">
+                            Bekor qilish
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Himoya: login qilmagan bo'lsa
+        if (!sessionStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+
+        // Foydalanuvchi ma'lumotlarini ko'rsatish
+        const username = sessionStorage.getItem('username') || 'Administrator';
+        const userRole = sessionStorage.getItem('userRole') || 'admin';
+        document.getElementById('userName').textContent = username;
+        document.getElementById('userRole').textContent = userRole === 'admin' ? 'Administrator' : 'Shifokor';
+
+        // Demo ma'lumotlar
+        const patients = {
+            1: {
+                id: 'P-001',
+                name: 'Aliyev Vali Jonovich',
+                birth: '1985-03-15',
+                phone: '+998 90 123 45 67',
+                address: 'Toshkent sh., Chilonzor tumani',
+                diagnosis: 'Arterial gipertenziya',
+                status: 'active'
+            },
+            2: {
+                id: 'P-002',
+                name: 'Rahimova Malika Akramovna',
+                birth: '1990-07-22',
+                phone: '+998 91 234 56 78',
+                address: 'Toshkent sh., Yunusobod tumani',
+                diagnosis: 'Migren',
+                status: 'active'
+            },
+            3: {
+                id: 'P-003',
+                name: 'Toshmatov Sardor Anvarovich',
+                birth: '1978-11-10',
+                phone: '+998 93 345 67 89',
+                address: 'Toshkent sh., Yakkasaroy tumani',
+                diagnosis: 'Qandli diabet 2-tur',
+                status: 'active'
+            },
+            4: {
+                id: 'P-004',
+                name: 'Hasanova Aziza Shavkatovna',
+                birth: '1995-08-05',
+                phone: '+998 94 456 78 90',
+                address: 'Toshkent sh., Sergeli tumani',
+                diagnosis: 'Bronxial astma',
+                status: 'active'
+            }
+        };
+
+        const doctors = {
+            1: {
+                id: 'D-001',
+                name: 'Dr. Karimov Javohir',
+                specialty: 'Kardiolog',
+                phone: '+998 90 111 22 33',
+                email: 'karimov@medcare.uz',
+                experience: 15,
+                status: 'active'
+            },
+            2: {
+                id: 'D-002',
+                name: 'Dr. Shukurova Dilnoza',
+                specialty: 'Nevrolog',
+                phone: '+998 91 222 33 44',
+                email: 'shukurova@medcare.uz',
+                experience: 12,
+                status: 'active'
+            },
+            3: {
+                id: 'D-003',
+                name: 'Dr. Abdullayev Otabek',
+                specialty: 'Terapevt',
+                phone: '+998 93 333 44 55',
+                email: 'abdullayev@medcare.uz',
+                experience: 10,
+                status: 'active'
+            },
+            4: {
+                id: 'D-004',
+                name: 'Dr. Yusupova Nodira',
+                specialty: 'Pediatr',
+                phone: '+998 94 444 55 66',
+                email: 'yusupova@medcare.uz',
+                experience: 8,
+                status: 'active'
+            }
+        };
+
+        // Bo'limlarni almashtirish
+        function showSection(sectionId) {
+            // Barcha bo'limlarni yashirish
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Tanlangan bo'limni ko'rsatish
+            document.getElementById(sectionId).classList.add('active');
+
+            // Menu itemlarni yangilash
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.menu-item').classList.add('active');
+
+            // Sahifa sarlavhasini yangilash
+            const titles = {
+                dashboard: 'Dashboard',
+                patients: 'Bemorlar',
+                doctors: 'Shifokorlar',
+                appointments: 'Qabullar',
+                pharmacy: 'Dorixona',
+                payments: 'To\'lovlar',
+                reports: 'Hisobotlar',
+                settings: 'Sozlamalar'
+            };
+            document.getElementById('pageTitle').textContent = titles[sectionId];
+        }
+
+        // Modal yopish
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Bemor ko'rish
+        function viewPatient(id) {
+            const patient = patients[id];
+            if (!patient) return;
+
+            const grid = document.getElementById('patientInfoGrid');
+            grid.innerHTML = `
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-id-card"></i> Bemor ID:</div>
+                    <div class="info-value">${patient.id}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-user"></i> F.I.O.:</div>
+                    <div class="info-value">${patient.name}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-birthday-cake"></i> Tug'ilgan sana:</div>
+                    <div class="info-value">${formatDate(patient.birth)}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-phone"></i> Telefon:</div>
+                    <div class="info-value">${patient.phone}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-map-marker-alt"></i> Manzil:</div>
+                    <div class="info-value">${patient.address}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-notes-medical"></i> Diagnosis:</div>
+                    <div class="info-value">${patient.diagnosis}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-toggle-on"></i> Holat:</div>
+                    <div class="info-value">
+                        <span class="badge ${patient.status === 'active' ? 'active' : 'inactive'}">
+                            ${patient.status === 'active' ? 'Faol' : 'Nofaol'}
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewPatientModal').classList.add('active');
+        }
+
+        // Bemor tahrirlash
+        function editPatient(id) {
+            const patient = patients[id];
+            if (!patient) return;
+
+            document.getElementById('editPatientId').value = patient.id;
+            document.getElementById('editPatientName').value = patient.name;
+            document.getElementById('editPatientBirth').value = patient.birth;
+            document.getElementById('editPatientPhone').value = patient.phone;
+            document.getElementById('editPatientAddress').value = patient.address;
+            document.getElementById('editPatientDiagnosis').value = patient.diagnosis;
+            document.getElementById('editPatientStatus').value = patient.status;
+
+            document.getElementById('editPatientModal').classList.add('active');
+        }
+
+        // Bemor saqlash
+        function savePatient(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('editPatientId').value;
+            const name = document.getElementById('editPatientName').value;
+            const phone = document.getElementById('editPatientPhone').value;
+
+            showNotification(`✅ ${name} ma'lumotlari muvaffaqiyatli saqlandi!`, 'success');
+            closeModal('editPatientModal');
+        }
+
+        // Bemor o'chirish
+        function deletePatient(id) {
+            const patient = patients[id];
+            if (!patient) return;
+
+            if (confirm(`${patient.name}ni o'chirmoqchimisiz?\nBu amalni qaytarib bo'lmaydi!`)) {
+                showNotification(`✅ ${patient.name} muvaffaqiyatli o'chirildi!`, 'success');
+                // Bu yerda backend ga so'rov yuboriladi
+            }
+        }
+
+        // Shifokor ko'rish
+        function viewDoctor(id) {
+            const doctor = doctors[id];
+            if (!doctor) return;
+
+            const grid = document.getElementById('doctorInfoGrid');
+            grid.innerHTML = `
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-id-card"></i> Shifokor ID:</div>
+                    <div class="info-value">${doctor.id}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-user-md"></i> F.I.O.:</div>
+                    <div class="info-value">${doctor.name}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-stethoscope"></i> Mutaxassislik:</div>
+                    <div class="info-value">${doctor.specialty}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-phone"></i> Telefon:</div>
+                    <div class="info-value">${doctor.phone}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-envelope"></i> Email:</div>
+                    <div class="info-value">${doctor.email}</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-calendar"></i> Tajriba:</div>
+                    <div class="info-value">${doctor.experience} yil</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-toggle-on"></i> Holat:</div>
+                    <div class="info-value">
+                        <span class="badge ${doctor.status === 'active' ? 'active' : 'inactive'}">
+                            ${doctor.status === 'active' ? 'Faol' : 'Nofaol'}
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewDoctorModal').classList.add('active');
+        }
+
+        // Shifokor tahrirlash
+        function editDoctor(id) {
+            const doctor = doctors[id];
+            if (!doctor) return;
+
+            document.getElementById('editDoctorId').value = doctor.id;
+            document.getElementById('editDoctorName').value = doctor.name;
+            document.getElementById('editDoctorSpecialty').value = doctor.specialty;
+            document.getElementById('editDoctorPhone').value = doctor.phone;
+            document.getElementById('editDoctorEmail').value = doctor.email;
+            document.getElementById('editDoctorExperience').value = doctor.experience;
+            document.getElementById('editDoctorStatus').value = doctor.status;
+
+            document.getElementById('editDoctorModal').classList.add('active');
+        }
+
+        // Shifokor saqlash
+        function saveDoctor(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('editDoctorId').value;
+            const name = document.getElementById('editDoctorName').value;
+
+            showNotification(`✅ ${name} ma'lumotlari muvaffaqiyatli saqlandi!`, 'success');
+            closeModal('editDoctorModal');
+        }
+
+        // Shifokor o'chirish
+        function deleteDoctor(id) {
+            const doctor = doctors[id];
+            if (!doctor) return;
+
+            if (confirm(`${doctor.name}ni o'chirmoqchimisiz?\nBu amalni qaytarib bo'lmaydi!`)) {
+                showNotification(`✅ ${doctor.name} muvaffaqiyatli o'chirildi!`, 'success');
+                // Bu yerda backend ga so'rov yuboriladi
+            }
+        }
+
+        // Sanani formatlash
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('uz-UZ', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        }
+
+        // Xabar ko'rsatish
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                warning: '#f59e0b'
+            };
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 30px;
+                right: 30px;
+                background: ${colors[type]};
+                color: white;
+                padding: 18px 28px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 3000;
+                font-weight: 600;
+                font-size: 16px;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // CSS animatsiyalar
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Chiqish
+        function logout() {
+            if (confirm('Tizimdan chiqmoqchimisiz?')) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Modal tashqarisiga bosilganda yopish
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>

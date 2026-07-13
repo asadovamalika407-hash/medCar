@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasallik tarixi - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="inner-page">
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <div class="logo-text">
+                        <h1>MedCare</h1>
+                        <p>Xususiy klinika</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="../index.html" class="nav-link">Bosh sahifa</a>
+                    <a href="head-doctor.html" class="nav-link">Bosh vrach</a>
+                    <a href="patients.html" class="nav-link">Bemorlar</a>
+                    <a href="doctors.html" class="nav-link">Shifokorlar</a>
+                    <a href="services.html" class="nav-link">Xizmatlar</a>
+                    <a href="medical-history.html" class="nav-link active">Kasallik tarixi</a>
+                    <a href="payment.html" class="nav-link">To'lov</a>
+                    <a href="about.html" class="nav-link">Biz haqimizda</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>Bemorlarning kasallik tarixi ro'yxati</h1>
+            <p>Tibbiy yozuvlar va davolanish tarixi</p>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="../index.html" class="back-to-home">
+                    <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                </a>
+            </div>
+            
+            <!-- Login Section -->
+            <div id="loginSection" style="max-width: 500px; margin: 0 auto 40px;">
+                <div style="background: var(--bg-light); padding: 40px; border-radius: 10px; text-align: center;">
+                    <h2 style="margin-bottom: 20px;"><i class="fas fa-lock"></i> Kirish</h2>
+                    <p style="color: var(--text-light); margin-bottom: 30px;">
+                        O'z kasallik tarixingizni ko'rish uchun bemor ID raqamingizni kiriting
+                    </p>
+                    <div class="form-group">
+                        <input type="text" id="patientId" class="form-control" 
+                               placeholder="Masalan: P-00421" 
+                               style="text-align: center; font-size: 18px;">
+                    </div>
+                    <button onclick="loginPatient()" class="btn-primary" 
+                            style="width: 100%; padding: 15px; font-size: 16px;">
+                        <i class="fas fa-sign-in-alt"></i> Kirish
+                    </button>
+                    <p style="margin-top: 20px; color: var(--text-light); font-size: 14px;">
+                        Demo uchun: P-00421, P-00418, P-00419
+                    </p>
+                </div>
+            </div>
+
+            <!-- Medical History Section (Hidden by default) -->
+            <div id="historySection" style="display: none;">
+                <div style="background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2 id="patientName" style="margin-bottom: 5px;"></h2>
+                            <p id="patientInfo" style="color: var(--text-light);"></p>
+                        </div>
+                        <button onclick="logoutPatient()" class="btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Chiqish
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Bemor</th>
+                                <th>Tashxis</th>
+                                <th>Shifokor</th>
+                                <th>Boshlanish sanasi</th>
+                                <th>Tugash sanasi</th>
+                                <th>Holat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top: 30px; padding: 30px; background: var(--bg-light); border-radius: 10px;">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-lock"></i> Maxfiylik haqida</h3>
+                    <p style="color: var(--text-light); line-height: 1.8;">
+                        Sizning tibbiy ma'lumotlaringiz to'liq maxfiy saqlanadi. Faqat siz o'z kasallik 
+                        tarixingizni ko'rishingiz mumkin. Boshqa bemorlarning ma'lumotlariga kirish imkoni yo'q.
+                    </p>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="../index.html" class="back-to-home">
+                        <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2025 MedCare. Barcha huquqlar himoyalangan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Medical history data (in real app, this comes from secure backend)
+        const medicalRecords = {
+            'P-00421': [
+                { id: '001', patient: 'Hasanova Aziza (P-00421)', diagnosis: 'Gipertoniya I daraja', doctor: 'Dr. Rahimova', startDate: '01.03.2025', endDate: '—', status: 'Davolanmoqda' }
+            ],
+            'P-00418': [
+                { id: '002', patient: 'Tursunov Ilhom (P-00418)', diagnosis: 'Qanoat diabet II tur', doctor: 'Dr. Ergasheva', startDate: '10.01.2025', endDate: '—', status: 'Kuzatuvda' }
+            ],
+            'P-00419': [
+                { id: '003', patient: 'Mirzayeva Kamola (P-00419)', diagnosis: 'Gastrit surunkali', doctor: 'Dr. Karimov', startDate: '15.04.2025', endDate: '05.05.2025', status: 'Tugagan' }
+            ]
+        };
+
+        function loginPatient() {
+            const patientId = document.getElementById('patientId').value.trim().toUpperCase();
+            
+            if (!patientId) {
+                alert('❌ Iltimos, bemor ID raqamini kiriting!');
+                return;
+            }
+
+            const records = medicalRecords[patientId];
+            
+            if (!records) {
+                alert('❌ Bunday bemor topilmadi!\n\nDemo uchun: P-00421, P-00418, P-00419');
+                return;
+            }
+
+            // Show history section
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('historySection').style.display = 'block';
+
+            // Populate patient info
+            document.getElementById('patientName').textContent = records[0].patient;
+            document.getElementById('patientInfo').textContent = 'Bemor ID: ' + patientId;
+
+            // Populate table
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = records.map(record => `
+                <tr>
+                    <td>${record.id}</td>
+                    <td>${record.patient}</td>
+                    <td>${record.diagnosis}</td>
+                    <td>${record.doctor}</td>
+                    <td>${record.startDate}</td>
+                    <td>${record.endDate}</td>
+                    <td><span class="badge ${getStatusBadge(record.status)}">${record.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function logoutPatient() {
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('historySection').style.display = 'none';
+            document.getElementById('patientId').value = '';
+        }
+
+        function getStatusBadge(status) {
+            if (status === 'Davolanmoqda') return 'badge-success';
+            if (status === 'Kuzatuvda') return 'badge-warning';
+            if (status === 'Tugagan') return 'badge-info';
+            return 'badge-danger';
+        }
+
+        // Allow Enter key to login
+        document.getElementById('patientId').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginPatient();
+            }
+        });
+    </script>
+</body>
+</html>

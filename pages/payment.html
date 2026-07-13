@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To'lov - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="inner-page">
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🏥</span>
+                    <div class="logo-text">
+                        <h1>MedCare</h1>
+                        <p>Xususiy klinika</p>
+                    </div>
+                </div>
+                <nav class="nav">
+                    <a href="../index.html" class="nav-link">Bosh sahifa</a>
+                    <a href="head-doctor.html" class="nav-link">Bosh vrach</a>
+                    <a href="patients.html" class="nav-link">Bemorlar</a>
+                    <a href="doctors.html" class="nav-link">Shifokorlar</a>
+                    <a href="services.html" class="nav-link">Xizmatlar</a>
+                    <a href="medical-history.html" class="nav-link">Kasallik tarixi</a>
+                    <a href="payment.html" class="nav-link active">To'lov</a>
+                    <a href="about.html" class="nav-link">Biz haqimizda</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>To'lov qilish</h1>
+            <p>Onlayn va xavfsiz to'lov tizimi</p>
+        </div>
+    </section>
+
+    <section class="page-content">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="../index.html" class="back-to-home">
+                    <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                </a>
+            </div>
+            
+            <div style="max-width: 800px; margin: 0 auto;">
+                <div style="background: var(--white); padding: 40px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                    <h2 style="margin-bottom: 30px; text-align: center;"><i class="fas fa-credit-card"></i> To'lov ma'lumotlari</h2>
+                    
+                    <form id="paymentForm" onsubmit="return processPayment(event)">
+                        <div class="form-group">
+                            <label for="patientId"><i class="fas fa-id-card"></i> Bemor ID *</label>
+                            <input type="text" id="patientId" class="form-control" 
+                                   placeholder="Masalan: P-00421" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="patientName"><i class="fas fa-user"></i> To'liq ismingiz *</label>
+                            <input type="text" id="patientName" class="form-control" 
+                                   placeholder="Masalan: Hasanova Aziza" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serviceType"><i class="fas fa-stethoscope"></i> Xizmat turi *</label>
+                            <select id="serviceType" class="form-control" onchange="updateAmount()" required>
+                                <option value="">— Tanlang —</option>
+                                <option value="konsultatsiya" data-price="150000">Shifokor konsultatsiyasi - 150,000 so'm</option>
+                                <option value="analiz" data-price="80000">Laboratoriya tahlillari - 80,000 so'm</option>
+                                <option value="uzi" data-price="200000">UZI tekshiruvi - 200,000 so'm</option>
+                                <option value="mrt" data-price="650000">MRT (Magnit rezonans) - 650,000 so'm</option>
+                                <option value="ekg" data-price="55000">EKG (Elektrokardiografiya) - 55,000 so'm</option>
+                                <option value="operatsiya" data-price="5000000">Operatsiya (o'rtacha) - 5,000,000 so'm</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount"><i class="fas fa-money-bill-wave"></i> Summa (so'm) *</label>
+                            <input type="number" id="amount" class="form-control" 
+                                   placeholder="0" readonly required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="paymentMethod"><i class="fas fa-wallet"></i> To'lov usuli *</label>
+                            <select id="paymentMethod" class="form-control" required>
+                                <option value="">— Tanlang —</option>
+                                <option value="payme"><i class="fas fa-credit-card"></i> Payme</option>
+                                <option value="click"><i class="fas fa-credit-card"></i> Click</option>
+                                <option value="uzcard"><i class="fas fa-credit-card"></i> UzCard</option>
+                                <option value="humo"><i class="fas fa-credit-card"></i> Humo</option>
+                                <option value="cash"><i class="fas fa-money-bill-wave"></i> Naqd pul (klinikada)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> Telefon raqam *</label>
+                            <input type="tel" id="phone" class="form-control" 
+                                   placeholder="+998 __ ___ __ __" 
+                                   oninput="formatPhoneNumber(this)" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes"><i class="fas fa-sticky-note"></i> Izoh (ixtiyoriy)</label>
+                            <textarea id="notes" class="form-control" 
+                                      placeholder="Qo'shimcha ma'lumot..."></textarea>
+                        </div>
+
+                        <div style="background: var(--bg-light); padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 10px;"><i class="fas fa-receipt"></i> To'lov xulasasi</h4>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Xizmat:</span>
+                                <span id="summaryService">—</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span>Summa:</span>
+                                <span id="summaryAmount">0 so'm</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; font-weight: bold; margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--border-color);">
+                                <span>Jami:</span>
+                                <span id="summaryTotal">0 so'm</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" 
+                                style="width: 100%; padding: 15px; font-size: 16px;">
+                            <i class="fas fa-check-circle"></i> To'lovni amalga oshirish
+                        </button>
+                    </form>
+                </div>
+
+                <div style="margin-top: 30px; padding: 30px; background: var(--bg-light); border-radius: 10px;">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Xavfsizlik</h3>
+                    <ul style="line-height: 2; color: var(--text-light);">
+                        <li>Barcha to'lovlar xavfsiz SSL shifrlangan aloqa orqali o'tadi</li>
+                        <li>Biz sizning karta ma'lumotlaringizni saqlamaymiz</li>
+                        <li>To'lov tasdiqnomasi emailga yuboriladi</li>
+                        <li>24/7 qo'llab-quvvatlash xizmati</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <a href="../index.html" class="back-to-home">
+                        <i class="fas fa-arrow-left"></i> Bosh sahifaga qaytish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2025 MedCare. Barcha huquqlar himoyalangan</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+        function updateAmount() {
+            const select = document.getElementById('serviceType');
+            const option = select.options[select.selectedIndex];
+            const price = option.getAttribute('data-price') || '0';
+            
+            document.getElementById('amount').value = price;
+            
+            const serviceName = option.text.split(' - ')[0] || '—';
+            const formattedPrice = parseInt(price).toLocaleString('uz-UZ') + ' so\'m';
+            
+            document.getElementById('summaryService').textContent = serviceName;
+            document.getElementById('summaryAmount').textContent = formattedPrice;
+            document.getElementById('summaryTotal').textContent = formattedPrice;
+        }
+
+        function processPayment(e) {
+            e.preventDefault();
+            
+            if (!validateForm('paymentForm')) {
+                alert('❌ Iltimos, barcha majburiy maydonlarni to\'ldiring!');
+                return false;
+            }
+            
+            const formData = {
+                patientId: document.getElementById('patientId').value,
+                patientName: document.getElementById('patientName').value,
+                serviceType: document.getElementById('serviceType').options[document.getElementById('serviceType').selectedIndex].text,
+                amount: document.getElementById('amount').value,
+                paymentMethod: document.getElementById('paymentMethod').options[document.getElementById('paymentMethod').selectedIndex].text,
+                phone: document.getElementById('phone').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            console.log('To\'lov ma\'lumotlari:', formData);
+            
+            // Simulate payment processing
+            alert('✅ To\'lov muvaffaqiyatli amalga oshirildi!\n\n' +
+                  'Bemor: ' + formData.patientName + '\n' +
+                  'Summa: ' + parseInt(formData.amount).toLocaleString('uz-UZ') + ' so\'m\n' +
+                  'To\'lov usuli: ' + formData.paymentMethod + '\n\n' +
+                  'Tasdiqnoma SMS orqali yuborildi.');
+            
+            document.getElementById('paymentForm').reset();
+            document.getElementById('summaryService').textContent = '—';
+            document.getElementById('summaryAmount').textContent = '0 so\'m';
+            document.getElementById('summaryTotal').textContent = '0 so\'m';
+            
+            return false;
+        }
+    </script>
+</body>
+</html>

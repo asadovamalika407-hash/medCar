@@ -8,12 +8,20 @@
     "backend": "cd backend && npm start",
     "dev": "concurrently \"npm run backend\" \"npx http-server -p 8080\"",
     "build": "cd medcare-hr-frontend && npm install && npm run build",
-    "vercel-build": "cd medcare-hr-frontend && npm install && npm run build"
+    "vercel-build": "npm install --prefix backend && cd medcare-hr-frontend && npm install && npm run build"
   },
   "keywords": ["medcare", "clinic", "healthcare", "hr", "management"],
   "author": "",
   "license": "MIT",
   "engines": {
     "node": ">=18.x"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
   }
 }

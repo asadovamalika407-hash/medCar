@@ -1,21 +1,5 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxLambdaSize": "50mb"
-      }
-    },
-    {
-      "src": "medcare-hr-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
   "routes": [
     {
       "src": "/api/(.*)",

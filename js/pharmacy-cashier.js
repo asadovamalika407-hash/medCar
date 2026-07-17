@@ -70,7 +70,8 @@ function searchProducts() {
     const query = document.getElementById('productSearch').value.toLowerCase().trim();
     
     if (query === '') {
-        loadProducts([]); // Bo'sh bo'lsa hech narsa ko'rsatma
+        // Bo'sh bo'lsa - skanerlangan mahsulotlarni ko'rsat
+        displayScannedProducts();
         return;
     }
     
@@ -93,6 +94,26 @@ function searchProducts() {
                 showToast('✅ Mahsulot avtomatik qo\'shildi!', 'success');
             }, 300);
         }
+    }
+}
+
+// Skanerlangan mahsulotlarni ko'rsatish
+function displayScannedProducts() {
+    const container = document.getElementById('productsList');
+    
+    if (cart.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 80px 40px; color: #9ca3af;"><i class="fas fa-barcode" style="font-size: 64px; margin-bottom: 20px; opacity: 0.2;"></i><p style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">Mahsulot qidiring</p><p style="font-size: 14px;">Barcode skanerini bosing yoki mahsulot nomini kiriting</p></div>';
+        return;
+    }
+    
+    // Savatdagi mahsulotlarni chap tomonda ko'rsatish
+    const scannedProducts = cart.map(item => {
+        const product = availableMedicines.find(p => p.id === item.id);
+        return product;
+    }).filter(p => p); // null'larni olib tashlash
+    
+    if (scannedProducts.length > 0) {
+        loadProducts(scannedProducts);
     }
 }
 
@@ -130,6 +151,9 @@ function addToCart(productId) {
     }
 
     updateCart();
+    
+    // Chap tomonda skanerlangan mahsulotlarni ko'rsatish
+    displayScannedProducts();
 }
 
 // Toast xabar ko'rsatish (kichik notification)
@@ -233,6 +257,7 @@ function decreaseQuantity(productId) {
 function removeFromCart(productId) {
     cart = cart.filter(item => item.id !== productId);
     updateCart();
+    displayScannedProducts(); // Chap tomonni ham yangilash
 }
 
 // Savatchani tozalash
@@ -241,6 +266,7 @@ function clearCart() {
     if (confirm('Savatchani tozalamoqchimisiz?')) {
         cart = [];
         updateCart();
+        displayScannedProducts(); // Chap tomonni ham yangilash
     }
 }
 
@@ -425,224 +451,196 @@ function showCashierTab(tabName) {
     }
 }
 
-// === BARCODE SCANNER (KAMERA BILAN QUAGGA.JS) ===
+// === BARCODE SCANNER - TO'LIQ QAYTA YOZILGAN ===
 let isScanning = false;
-let stream = null;
 
 function startBarcodeScanner() {
-    // Avval QuaggaJS mavjudligini tekshirish
+    console.log('=== BARCODE SKANER BOSHLANDI ===');
+    
+    // 1. QuaggaJS borligini tekshirish
     if (typeof Quagga === 'undefined') {
-        alert('❌ QuaggaJS kutubxonasi yuklanmagan!\n\nQo\'lda kiritish:');
-        const barcode = prompt('🔍 Barcode kiriting:\n\n(Misol: 4680001234567)');
-        if (barcode && barcode.trim() !== '') {
-            handleBarcodeInput(barcode.trim());
-        }
+        alert('❌ Xato: QuaggaJS kutubxonasi yuklanmagan!\n\nSahifani yangilang (F5 bosing)');
         return;
     }
 
+    // 2. HTML elementlarni topish
     const modal = document.getElementById('barcodeScannerModal');
-    const video = document.getElementById('barcodeScannerVideo');
-    const canvas = document.getElementById('barcodeCanvas');
+    const container = document.getElementById('cameraContainer');
     const status = document.getElementById('scannerStatus');
     const resultDiv = document.getElementById('scannerResult');
     
+    if (!modal || !container || !status || !resultDiv) {
+        alert('❌ Xato: Skaner elementlari topilmadi!');
+        return;
+    }
+    
+    // 3. Modalni ochish
     modal.classList.add('active');
     resultDiv.style.display = 'none';
-    status.textContent = 'Kamera ishga tushirilmoqda...';
+    status.innerHTML = '📸 Kamera ishga tushirilmoqda...<br><small>Brauzerda "Allow" tugmasini bosing</small>';
     status.style.color = '#f59e0b';
     isScanning = true;
 
-    // Quagga ni to'xtatish (eski sessiyalarni)
+    // 4. Eski sessiyani to'xtatish
     try {
         Quagga.stop();
-    } catch(e) {}
+        Quagga.offDetected();
+    } catch(e) {
+        console.log('Eski sessiya yo\'q');
+    }
 
-    // QuaggaJS ni ishga tushirish
+    console.log('QuaggaJS ni ishga tushirish...');
+
+    // 5. Quagga'ni ishga tushirish - ENG ODDIY SOZLAMALAR
     Quagga.init({
         inputStream: {
-            name: "Live",
             type: "LiveStream",
-            target: document.getElementById('cameraContainer'),
+            target: container,
             constraints: {
-                width: { ideal: 640 },
-                height: { ideal: 480 },
-                facingMode: "environment" // Orqa kamera (telefonda)
+                width: 1280,
+                height: 720,
+                facingMode: "environment"
             }
         },
         decoder: {
             readers: [
-                "ean_reader",      // EAN-13, EAN-8
-                "ean_8_reader",
-                "code_128_reader", // Code 128
-                "code_39_reader",  // Code 39
-                "code_93_reader",
-                "upc_reader",      // UPC
-                "upc_e_reader",
-                "codabar_reader",
-                "i2of5_reader"
-            ],
-            debug: {
-                drawBoundingBox: true,
-                showFrequency: true,
-                drawScanline: true,
-                showPattern: true
-            }
+                "ean_reader",
+                "code_128_reader",
+                "code_39_reader",
+                "upc_reader"
+            ]
         },
-        locate: true,
-        locator: {
-            halfSample: true,
-            patchSize: "medium"
-        },
-        numOfWorkers: 0, // Web Workers ni o'chirish (ba'zan muammo beradi)
-        frequency: 10
+        locate: true
     }, function(err) {
         if (err) {
-            console.error('Quagga xatosi:', err);
-            status.textContent = '❌ Kamera xatosi: ' + err.message;
+            console.error('XATO:', err);
+            status.innerHTML = `❌ <strong>Kamera xatosi!</strong><br><br>${err.name}<br><small>${err.message}</small>`;
             status.style.color = '#ef4444';
             
-            // 3 soniyadan keyin qo'lda kiritish
-            setTimeout(() => {
-                stopBarcodeScanner();
-                const barcode = prompt('⚠️ Kamera ishlamadi!\n\n🔍 Barcode ni qo\'lda kiriting:');
-                if (barcode && barcode.trim() !== '') {
-                    handleBarcodeInput(barcode.trim());
-                }
-            }, 3000);
+            if (err.name === 'NotAllowedError') {
+                alert('❌ Kamera ruxsati berilmadi!\n\nBrauzerni yopib, qaytadan oching va "Allow" bosing.');
+            }
             return;
         }
         
-        console.log("✅ Quagga muvaffaqiyatli ishga tushdi!");
-        status.textContent = '📸 Barcode ni kamera oldiga qo\'ying...';
+        console.log('✅ Quagga muvaffaqiyatli boshlandi!');
+        status.innerHTML = '📸 <strong>TAYYOR!</strong><br>Barcode ni kamera oldiga qo\'ying';
         status.style.color = '#10b981';
+        
+        // Quagga'ni start qilish
         Quagga.start();
+        console.log('Quagga.start() chaqirildi');
     });
 
-    // Barcode aniqlanganda
-    Quagga.onDetected(function(result) {
+    // 6. Barcode topilganda
+    let lastCode = '';
+    let lastTime = 0;
+    
+    Quagga.onDetected(function(data) {
         if (!isScanning) return;
         
-        const code = result.codeResult.code;
-        console.log("✅ Barcode topildi:", code);
+        const code = data.codeResult.code;
+        const now = Date.now();
         
-        // Natijani ko'rsatish
+        console.log('🔍 TOPILDI:', code);
+        
+        // Faqat BIR XIL barcode'ni 2 soniya ichida qayta qabul qilmaslik
+        // BOSHQA barcode'lar darhol qabul qilinadi!
+        if (code === lastCode && (now - lastTime) < 2000) {
+            console.log('⏩ Takroriy (bir xil barcode), o\'tkazildi');
+            return;
+        }
+        
+        // Yangi barcode yoki 2 soniyadan keyin
+        lastCode = code;
+        lastTime = now;
+        
+        console.log('✅ QABUL QILINDI:', code);
+        
+        // Ekranda ko'rsatish
         document.getElementById('scannedBarcode').textContent = code;
         resultDiv.style.display = 'block';
-        status.textContent = '✅ Topildi: ' + code;
+        status.innerHTML = '✅ <strong>TOPILDI!</strong><br>Keyingisini skanerlang';
         status.style.color = '#10b981';
         
-        // Mahsulotni qo'shish
+        // Toast
+        showToast('✅ ' + code, 'success');
+        
+        // Mahsulotni qidirish
         handleBarcodeInput(code);
         
-        // 2 soniyadan keyin modalni yopish
+        // 1.5 soniya keyin yashirish va davom etish
         setTimeout(() => {
-            stopBarcodeScanner();
-        }, 2000);
+            if (isScanning) {
+                resultDiv.style.display = 'none';
+                status.innerHTML = '📸 <strong>Keyingi barcode</strong>';
+            }
+        }, 1500);
     });
-
-    // Jarayonni ko'rsatish (debug)
-    Quagga.onProcessed(function(result) {
-        const drawingCtx = canvas.getContext('2d');
-        const drawingCanvas = canvas;
-
-        if (result) {
-            if (result.boxes) {
-                drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
-                result.boxes.filter(function (box) {
-                    return box !== result.box;
-                }).forEach(function (box) {
-                    Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
-                });
-            }
-
-            if (result.box) {
-                Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
-            }
-
-            if (result.codeResult && result.codeResult.code) {
-                Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
-            }
-        }
-    });
+    
+    console.log('onDetected listener qo\'shildi');
 }
 
 // Barcode kiritilganda ishlov berish (umumiy funksiya)
 function handleBarcodeInput(code) {
+    console.log('🔍 Barcode qidirilmoqda:', code);
+    
+    // LocalStorage dan eng yangi ma'lumotlarni olish
+    loadMedicinesFromStorage();
+    
     const product = availableMedicines.find(p => p.barcode === code);
     
     if (product) {
+        console.log('✅ Mahsulot topildi:', product.name);
+        
         if (product.stock === 0) {
             showToast('❌ Bu mahsulot qolmagan!', 'error');
         } else {
-            // Qidiruv qutisiga barcode qo'yish
-            document.getElementById('productSearch').value = code;
-            searchProducts();
+            // Qidiruv qutisiga barcode qo'yish va qidirish
+            const searchBox = document.getElementById('productSearch');
+            if (searchBox) {
+                searchBox.value = code;
+                searchProducts();
+            }
             
             // Avtomatik savatchaga qo'shish
             setTimeout(() => {
                 addToCart(product.id);
-                showToast('✅ Mahsulot savatchaga qo\'shildi: ' + product.name, 'success');
+                showToast('✅ Savatchaga qo\'shildi: ' + product.name, 'success');
             }, 300);
         }
     } else {
+        console.log('❌ Mahsulot topilmadi:', code);
         showToast('❌ Barcode topilmadi: ' + code, 'error');
     }
 }
 
 function stopBarcodeScanner() {
+    console.log('🛑 Skaner to\'xtatilmoqda...');
     isScanning = false;
-    const modal = document.getElementById('barcodeScannerModal');
-    modal.classList.remove('active');
+    scanAttempts = 0;
     
-    // Quagga'ni to'xtatish
+    const modal = document.getElementById('barcodeScannerModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    
+    // Quagga'ni to'liq to'xtatish
     if (typeof Quagga !== 'undefined') {
         try {
+            Quagga.offDetected();
+            Quagga.offProcessed();
             Quagga.stop();
-            console.log("Quagga to'xtatildi");
+            console.log("✅ Quagga to'xtatildi");
         } catch(e) {
             console.error('Quagga stop xatosi:', e);
         }
-    }
-    
-    // Stream ni to'xtatish
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        stream = null;
     }
 }
 
 // Barcode topilganda (eski funksiya, endi ishlatilmaydi)
 function onBarcodeDetected(barcode) {
     // Bu funksiya endi ishlatilmaydi - Quagga.onDetected ishlatiladi
-}
-
-// CSS animatsiyalar
-if (!document.getElementById('kassirAnimations')) {
-    const style = document.createElement('style');
-    style.id = 'kassirAnimations';
-    style.textContent = `
-        @keyframes slideInUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOutDown {
-            from {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
 }
 
 
@@ -661,3 +659,41 @@ window.addEventListener('storage', function(e) {
         loadProducts();
     }
 });
+
+
+// Barcode kiritilganda ishlov berish
+function handleBarcodeInput(code) {
+    console.log('🔍 Mahsulot qidirilmoqda:', code);
+    
+    // LocalStorage'dan eng yangi ma'lumotlarni olish
+    loadMedicinesFromStorage();
+    
+    const product = availableMedicines.find(p => p.barcode === code);
+    
+    if (product) {
+        console.log('✅ Mahsulot topildi:', product.name);
+        
+        if (product.stock === 0) {
+            showToast('❌ Bu mahsulot qolmagan!', 'error');
+        } else {
+            // Qidiruv qutisiga qo'yish
+            const searchBox = document.getElementById('productSearch');
+            if (searchBox) {
+                searchBox.value = code;
+                searchProducts();
+            }
+            
+            // Avtomatik savatchaga qo'shish
+            setTimeout(() => {
+                addToCart(product.id);
+                showToast('✅ Qo\'shildi: ' + product.name, 'success');
+            }, 300);
+        }
+    } else {
+        console.log('❌ Mahsulot topilmadi:', code);
+        showToast('❌ Barcode topilmadi: ' + code, 'error');
+        
+        // LocalStorage'dagi barcode'larni console'ga chiqarish (debug uchun)
+        console.log('LocalStorage dagi barcode\'lar:', availableMedicines.map(m => `${m.barcode} - ${m.name}`));
+    }
+}

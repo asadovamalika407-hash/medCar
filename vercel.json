@@ -7,12 +7,23 @@
       "config": {
         "maxLambdaSize": "50mb"
       }
+    },
+    {
+      "src": "medcare-hr-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
       "dest": "/api/index.js"
+    },
+    {
+      "src": "/hr/(.*)",
+      "dest": "/medcare-hr-frontend/$1"
     },
     {
       "src": "/pages/(.*)",
@@ -29,6 +40,10 @@
     {
       "src": "/",
       "dest": "/index.html"
+    },
+    {
+      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|json))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
@@ -65,6 +80,12 @@
           "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
         }
       ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/hr/:path*",
+      "destination": "/medcare-hr-frontend/:path*"
     }
   ]
 }

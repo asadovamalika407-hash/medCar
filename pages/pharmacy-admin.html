@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dorixona Boshqaruvi - MedCare</title>
+    <title>Ombor Boshqaruvi - MedCare</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -476,15 +476,15 @@
     <div class="sidebar">
         <div class="sidebar-header">
             <div class="sidebar-logo">
-                <i class="fas fa-pills"></i>
-                <h1>Dorixona</h1>
+                <i class="fas fa-warehouse"></i>
+                <h1>Ombor</h1>
             </div>
             <div class="user-info">
                 <div class="user-avatar">
                     <i class="fas fa-user-tie"></i>
                 </div>
                 <div class="user-details">
-                    <h3 id="userName">Dorixona Admin</h3>
+                    <h3 id="userName">Ombor Admin</h3>
                     <p>Qodirov Jahongir</p>
                 </div>
             </div>
@@ -670,7 +670,7 @@
                         </h2>
 
                         <!-- Savatcha mahsulotlari -->
-                        <div id="cartItems" style="flex: 1; overflow-y: auto; margin-bottom: 20px; min-height: 200px;">
+                        <div id="cartItems" style="flex: 1; overflow-y: auto; margin-bottom: 20px; min-height: 300px; max-height: 400px;">
                             <div style="text-align: center; padding: 40px 20px; color: #9ca3af;">
                                 <i class="fas fa-shopping-basket" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
                                 <p>Savatcha bo'sh</p>
@@ -845,11 +845,39 @@
                         <div id="cameraContainer" style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
                             <video id="barcodeScannerVideo" autoplay playsinline style="width: 100%; border-radius: 12px; background: #000;"></video>
                             <canvas id="barcodeCanvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></canvas>
+                            
+                            <!-- Skanerlash hududi (markazda) -->
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%; height: 40%; border: 3px solid #10b981; border-radius: 12px; box-shadow: 0 0 0 9999px rgba(0,0,0,0.5);">
+                                <div style="position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                                    <i class="fas fa-bullseye"></i> Barcode'ni bu yerga qo'ying
+                                </div>
+                                <!-- Burchak chiziqlari -->
+                                <div style="position: absolute; top: -3px; left: -3px; width: 30px; height: 30px; border-top: 5px solid #10b981; border-left: 5px solid #10b981; border-radius: 12px 0 0 0;"></div>
+                                <div style="position: absolute; top: -3px; right: -3px; width: 30px; height: 30px; border-top: 5px solid #10b981; border-right: 5px solid #10b981; border-radius: 0 12px 0 0;"></div>
+                                <div style="position: absolute; bottom: -3px; left: -3px; width: 30px; height: 30px; border-bottom: 5px solid #10b981; border-left: 5px solid #10b981; border-radius: 0 0 0 12px;"></div>
+                                <div style="position: absolute; bottom: -3px; right: -3px; width: 30px; height: 30px; border-bottom: 5px solid #10b981; border-right: 5px solid #10b981; border-radius: 0 0 12px 0;"></div>
+                            </div>
                         </div>
                         <p id="scannerStatus" style="margin-top: 20px; color: #6b7280; font-weight: 600;">Kamera ishga tushirilmoqda...</p>
                         <div id="scannerResult" style="margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 10px; display: none;">
                             <p style="color: #10b981; font-weight: 600; font-size: 18px;"><i class="fas fa-check-circle"></i> Barcode topildi!</p>
                             <p id="scannedBarcode" style="color: #1f2937; font-weight: 700; font-size: 24px; font-family: 'Courier New', monospace; margin-top: 10px;"></p>
+                        </div>
+                        
+                        <!-- Ko'rsatma va tugma -->
+                        <div style="margin-top: 20px; padding: 15px; background: #f0f9ff; border-radius: 10px; border: 2px dashed #3b82f6;">
+                            <p style="color: #1e40af; font-weight: 600; margin-bottom: 10px;">
+                                <i class="fas fa-info-circle"></i> Ko'rsatma
+                            </p>
+                            <p style="color: #1f2937; font-size: 14px; margin-bottom: 15px;">
+                                <strong>1.</strong> Barcode'ni yashil ramka <strong>MARKAZIGA</strong> qo'ying<br>
+                                <strong>2.</strong> Barcode to'liq ko'rinishi va aniq bo'lishi kerak<br>
+                                <strong>3.</strong> Telefon/kamerani 15-20 sm masofada ushlab turing<br>
+                                <strong>4.</strong> 2-3 soniya kutib turing (avtomatik topiladi)
+                            </p>
+                            <button onclick="stopBarcodeScanner()" style="padding: 12px 30px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 15px;">
+                                <i class="fas fa-times-circle"></i> Skaner ni yopish
+                            </button>
                         </div>
                     </div>
                 </div>

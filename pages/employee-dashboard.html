@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xodim Paneli - MedCare</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .employee-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        .employee-header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .welcome-text h1 { margin: 0 0 5px 0; font-size: 28px; }
+        .welcome-text p { margin: 0; opacity: 0.9; font-size: 14px; }
+        .header-actions { display: flex; gap: 10px; }
+        .btn-logout { 
+            background: rgba(255,255,255,0.2); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-logout:hover { background: rgba(255,255,255,0.3); }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { margin: 0 0 10px 0; font-size: 16px; color: #666; }
+        .stat-card .value { font-size: 32px; font-weight: bold; color: #333; }
+        .stat-card .icon { 
+            font-size: 40px; 
+            opacity: 0.2; 
+            float: right; 
+            margin-top: -50px; 
+        }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0; flex-wrap: wrap; }
+        .tab { 
+            padding: 15px 25px; 
+            cursor: pointer; 
+            border: none; 
+            background: none; 
+            font-size: 16px; 
+            color: #666; 
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .tab.active { color: #667eea; border-bottom: 3px solid #667eea; font-weight: bold; }
+        .tab:hover { color: #667eea; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; 
+        }
+        .card-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .card-header h3 { margin: 0; font-size: 22px; }
+        
+        .btn-primary { 
+            background: #667eea; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #e0e0e0; }
+        th { background: #f5f5f5; font-weight: bold; color: #333; }
+        tr:hover { background: #f9f9f9; }
+        
+        .badge { 
+            padding: 5px 12px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: bold; 
+        }
+        .badge.success { background: #e8f5e9; color: #2e7d32; }
+        .badge.warning { background: #fff3e0; color: #ed6c02; }
+        .badge.danger { background: #ffebee; color: #d32f2f; }
+        .badge.info { background: #e3f2fd; color: #1976d2; }
+        
+        .profile-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .info-item { 
+            padding: 15px; 
+            background: #f9f9f9; 
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .info-item label { 
+            display: block; 
+            font-size: 12px; 
+            color: #666; 
+            margin-bottom: 5px; 
+            text-transform: uppercase; 
+        }
+        .info-item .value { 
+            font-size: 16px; 
+            font-weight: 600; 
+            color: #333; 
+        }
+        
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 1000; 
+        }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            max-width: 600px; 
+            width: 90%; 
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+        .modal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+        }
+        .modal-header h3 { margin: 0; }
+        .close-modal { 
+            font-size: 24px; 
+            cursor: pointer; 
+            border: none; 
+            background: none; 
+        }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+            color: #333; 
+        }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px; 
+            font-size: 14px; 
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        
+        .form-actions { 
+            display: flex; 
+            gap: 10px; 
+            justify-content: flex-end; 
+            margin-top: 20px; 
+        }
+        .btn-submit { 
+            background: #667eea; 
+            color: white; 
+            border: none; 
+            padding: 12px 30px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+        .btn-cancel { 
+            background: #e0e0e0; 
+            color: #333; 
+            border: none; 
+            padding: 12px 30px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fas fa-hospital"></i></span>
+                    <div class="logo-text">
+                        <h1>MedCare</h1>
+                        <p>Xodimlar Paneli</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="employee-container">
+        <!-- Welcome Header -->
+        <div class="employee-header">
+            <div class="welcome-text">
+                <h1><i class="fas fa-user-circle"></i> Xush kelibsiz, <span id="employeeName">Xodim</span>!</h1>
+                <p>ID: <span id="employeeIdDisplay"></span> | Lavozim: <span id="employeePosition"></span></p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Chiqish
+                </button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Jami Ta'tilim</h3>
+                <div class="value" id="myTotalLeaves">0</div>
+                <i class="fas fa-plane-departure icon"></i>
+            </div>
+            <div class="stat-card">
+                <h3>Tasdiqlangan</h3>
+                <div class="value" id="myApprovedLeaves">0</div>
+                <i class="fas fa-check-circle icon"></i>
+            </div>
+            <div class="stat-card">
+                <h3>Kutilmoqda</h3>
+                <div class="value" id="myPendingLeaves">0</div>
+                <i class="fas fa-clock icon"></i>
+            </div>
+            <div class="stat-card">
+                <h3>Oxirgi Maosh</h3>
+                <div class="value" id="mySalary">0 so'm</div>
+                <i class="fas fa-money-bill-wave icon"></i>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('profile')">
+                <i class="fas fa-user"></i> Profil
+            </button>
+            <button class="tab" onclick="switchTab('leave')">
+                <i class="fas fa-plane-departure"></i> Ta'til
+            </button>
+            <button class="tab" onclick="switchTab('attendance')">
+                <i class="fas fa-calendar-check"></i> Davomat
+            </button>
+            <button class="tab" onclick="switchTab('salary')">
+                <i class="fas fa-money-bill-wave"></i> Maosh
+            </button>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile-tab" class="tab-content active">
+            <div class="card">
+                <h3><i class="fas fa-user-circle"></i> Shaxsiy Ma'lumotlar</h3>
+                <div class="profile-info" id="profileInfo">
+                    <!-- JavaScript bilan to'ldiriladi -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Leave Tab -->
+        <div id="leave-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-plane-departure"></i> Mening Ta'tillarim</h3>
+                    <button class="btn-primary" onclick="openLeaveRequestModal()">
+                        <i class="fas fa-plus"></i> Ta'til So'rovi
+                    </button>
+                </div>
+                <table id="myLeaveTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Turi</th>
+                            <th>Boshlanish</th>
+                            <th>Tugash</th>
+                            <th>Kunlar</th>
+                            <th>Sabab</th>
+                            <th>Holat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myLeaveTableBody">
+                        <!-- JavaScript bilan to'ldiriladi -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Attendance Tab -->
+        <div id="attendance-tab" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-calendar-check"></i> Mening Davomatim</h3>
+                <table id="myAttendanceTable">
+                    <thead>
+                        <tr>
+                            <th>Sana</th>
+                            <th>Kelish Vaqti</th>
+                            <th>Ketish Vaqti</th>
+                            <th>Holat</th>
+                            <th>Izoh</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myAttendanceTableBody">
+                        <tr>
+                            <td>2024-12-14</td>
+                            <td>08:30</td>
+                            <td>17:00</td>
+                            <td><span class="badge success">Keldi</span></td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2024-12-13</td>
+                            <td>08:25</td>
+                            <td>17:05</td>
+                            <td><span class="badge success">Keldi</span></td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>2024-12-12</td>
+                            <td>09:15</td>
+                            <td>17:00</td>
+                            <td><span class="badge warning">Kech qoldi</span></td>
+                            <td>Yo'lda tiqilinch</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Salary Tab -->
+        <div id="salary-tab" class="tab-content">
+            <div class="card">
+                <h3><i class="fas fa-money-bill-wave"></i> Maosh Varaqam</h3>
+                <div id="mySalaryDetails">
+                    <!-- JavaScript bilan to'ldiriladi -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leave Request Modal -->
+    <div id="leaveRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plane-departure"></i> Ta'til So'rovi</h3>
+                <button class="close-modal" onclick="closeLeaveRequestModal()">&times;</button>
+            </div>
+            <form id="leaveRequestForm">
+                <div class="form-group">
+                    <label>Ta'til Turi *</label>
+                    <select name="leaveType" required>
+                        <option value="">Tanlang...</option>
+                        <option value="paid"><i class="fas fa-money-bill-wave"></i> Klinika Hisobidan Ta'til (Pullik)</option>
+                        <option value="unpaid"><i class="fas fa-briefcase"></i> O'z Hisobidan Ta'til (Maoshsiz)</option>
+                        <option value="sick"><i class="fas fa-notes-medical"></i> Kasallik Varaqasi</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Boshlanish Sanasi *</label>
+                        <input type="date" name="startDate" id="empLeaveStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tugash Sanasi *</label>
+                        <input type="date" name="endDate" id="empLeaveEndDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Kunlar Soni</label>
+                    <input type="number" name="days" id="empLeaveDays" readonly style="background: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Sabab *</label>
+                    <textarea name="reason" required placeholder="Ta'til sababini yozing..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeLeaveRequestModal()">Bekor qilish</button>
+                    <button type="submit" class="btn-submit">Yuborish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/employee-dashboard.js"></script>
+</body>
+</html>

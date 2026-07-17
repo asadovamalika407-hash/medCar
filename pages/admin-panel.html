@@ -636,6 +636,14 @@
                 <i class="fas fa-users-cog"></i>
                 <span>HR Tizimi</span>
             </a>
+            <a class="menu-item" onclick="showSection('arizalar')">
+                <i class="fas fa-file-signature"></i>
+                <span>Arizalar</span>
+            </a>
+            <a class="menu-item" href="employee-login.html" style="background: rgba(255,255,255,0.1);">
+                <i class="fas fa-user-tie"></i>
+                <span>Xodim Paneli</span>
+            </a>
         </div>
 
         <button class="logout-btn" onclick="logout()">
@@ -744,73 +752,107 @@
         <!-- Patients Section -->
         <div class="content-section" id="patients">
             <div class="section-header">
-                <h2><i class="fas fa-users"></i> Bemorlar ro'yxati</h2>
-                <button class="btn-action">
-                    <i class="fas fa-plus"></i> Yangi bemor
-                </button>
+                <h2><i class="fas fa-users"></i> Bemorlar va Palata Bronlari</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-action" onclick="showPatientsTab('all')">
+                        <i class="fas fa-users"></i> Barcha Bemorlar
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="showPatientsTab('bookings')">
+                        <i class="fas fa-bed"></i> Palata Bronlari
+                    </button>
+                </div>
             </div>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>F.I.O.</th>
-                        <th>Tug'ilgan sana</th>
-                        <th>Telefon</th>
-                        <th>Holat</th>
-                        <th>Amallar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>P-001</td>
-                        <td>Aliyev Vali Jonovich</td>
-                        <td>15.03.1985</td>
-                        <td>+998 90 123 45 67</td>
-                        <td><span class="badge active">Faol</span></td>
-                        <td class="action-buttons">
-                            <button class="btn-view" onclick="viewPatient(1)">Ko'rish</button>
-                            <button class="btn-edit" onclick="editPatient(1)">Tahrirlash</button>
-                            <button class="btn-delete" onclick="deletePatient(1)">O'chirish</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P-002</td>
-                        <td>Rahimova Malika Akramovna</td>
-                        <td>22.07.1990</td>
-                        <td>+998 91 234 56 78</td>
-                        <td><span class="badge active">Faol</span></td>
-                        <td class="action-buttons">
-                            <button class="btn-view" onclick="viewPatient(2)">Ko'rish</button>
-                            <button class="btn-edit" onclick="editPatient(2)">Tahrirlash</button>
-                            <button class="btn-delete" onclick="deletePatient(2)">O'chirish</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P-003</td>
-                        <td>Toshmatov Sardor Anvarovich</td>
-                        <td>10.11.1978</td>
-                        <td>+998 93 345 67 89</td>
-                        <td><span class="badge active">Faol</span></td>
-                        <td class="action-buttons">
-                            <button class="btn-view" onclick="viewPatient(3)">Ko'rish</button>
-                            <button class="btn-edit" onclick="editPatient(3)">Tahrirlash</button>
-                            <button class="btn-delete" onclick="deletePatient(3)">O'chirish</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>P-004</td>
-                        <td>Hasanova Aziza Shavkatovna</td>
-                        <td>05.08.1995</td>
-                        <td>+998 94 456 78 90</td>
-                        <td><span class="badge active">Faol</span></td>
-                        <td class="action-buttons">
-                            <button class="btn-view" onclick="viewPatient(4)">Ko'rish</button>
-                            <button class="btn-edit" onclick="editPatient(4)">Tahrirlash</button>
-                            <button class="btn-delete" onclick="deletePatient(4)">O'chirish</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <!-- All Patients Tab -->
+            <div id="allPatientsTab">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>F.I.O.</th>
+                            <th>Tug'ilgan sana</th>
+                            <th>Telefon</th>
+                            <th>Holat</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>P-001</td>
+                            <td>Aliyev Vali Jonovich</td>
+                            <td>15.03.1985</td>
+                            <td>+998 90 123 45 67</td>
+                            <td><span class="badge active">Faol</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-view" onclick="viewPatient(1)">Ko'rish</button>
+                                <button class="btn-edit" onclick="editPatient(1)">Tahrirlash</button>
+                                <button class="btn-delete" onclick="deletePatient(1)">O'chirish</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>P-002</td>
+                            <td>Rahimova Malika Akramovna</td>
+                            <td>22.07.1990</td>
+                            <td>+998 91 234 56 78</td>
+                            <td><span class="badge active">Faol</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-view" onclick="viewPatient(2)">Ko'rish</button>
+                                <button class="btn-edit" onclick="viewPatient(2)">Tahrirlash</button>
+                                <button class="btn-delete" onclick="deletePatient(2)">O'chirish</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>P-003</td>
+                            <td>Toshmatov Sardor Anvarovich</td>
+                            <td>10.11.1978</td>
+                            <td>+998 93 345 67 89</td>
+                            <td><span class="badge active">Faol</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-view" onclick="viewPatient(3)">Ko'rish</button>
+                                <button class="btn-edit" onclick="editPatient(3)">Tahrirlash</button>
+                                <button class="btn-delete" onclick="deletePatient(3)">O'chirish</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>P-004</td>
+                            <td>Hasanova Aziza Shavkatovna</td>
+                            <td>05.08.1995</td>
+                            <td>+998 94 456 78 90</td>
+                            <td><span class="badge active">Faol</span></td>
+                            <td class="action-buttons">
+                                <button class="btn-view" onclick="viewPatient(4)">Ko'rish</button>
+                                <button class="btn-edit" onclick="editPatient(4)">Tahrirlash</button>
+                                <button class="btn-delete" onclick="deletePatient(4)">O'chirish</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Room Bookings Tab -->
+            <div id="roomBookingsTab" style="display: none;">
+                <table class="data-table" id="roomBookingsTable">
+                    <thead>
+                        <tr>
+                            <th>Bron ID</th>
+                            <th>Bemor</th>
+                            <th>Pasport</th>
+                            <th>Telefon</th>
+                            <th>Palata Turi</th>
+                            <th>Yotish</th>
+                            <th>Chiqish</th>
+                            <th>Kunlar</th>
+                            <th>Jami To'lov</th>
+                            <th>Holat</th>
+                            <th>To'lov</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="roomBookingsBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Doctors Section -->
@@ -1222,6 +1264,343 @@
             <h2><i class="fas fa-cog"></i> Sozlamalar</h2>
             <p style="color: #6b7280; margin-top: 20px;">Tizim sozlamalari bu yerda ko'rsatiladi...</p>
         </div>
+
+        <!-- Arizalar Section -->
+        <div class="content-section" id="arizalar">
+            <div class="section-header">
+                <h2><i class="fas fa-file-signature"></i> Xodimlar Arizalari</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-action" onclick="filterLeaveRequests('all')" id="filterAll">
+                        <i class="fas fa-list"></i> Barchasi
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);" onclick="filterLeaveRequests('pending')" id="filterPending">
+                        <i class="fas fa-clock"></i> Kutilmoqda
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="filterLeaveRequests('approved')" id="filterApproved">
+                        <i class="fas fa-check-circle"></i> Tasdiqlangan
+                    </button>
+                    <button class="btn-action" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);" onclick="filterLeaveRequests('rejected')" id="filterRejected">
+                        <i class="fas fa-times-circle"></i> Rad etilgan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="totalRequests">15</h3>
+                        <p>Jami arizalar</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="pendingRequests">5</h3>
+                        <p>Kutilmoqda</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="approvedRequests">8</h3>
+                        <p>Tasdiqlangan</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div class="stat-details">
+                        <h3 id="rejectedRequests">2</h3>
+                        <p>Rad etilgan</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leave Requests Table -->
+            <table class="data-table" id="leaveRequestsTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Xodim</th>
+                        <th>Lavozim</th>
+                        <th>Ariza turi</th>
+                        <th>Boshlanish</th>
+                        <th>Tugash</th>
+                        <th>Kunlar</th>
+                        <th>Sabab</th>
+                        <th>Holat</th>
+                        <th>Amallar</th>
+                    </tr>
+                </thead>
+                <tbody id="leaveRequestsBody">
+                    <!-- Demo data -->
+                    <tr class="leave-request" data-status="pending">
+                        <td>AR-001</td>
+                        <td>Aliyev Javohir Rustamovich</td>
+                        <td>Kardiolog</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>20.07.2026</td>
+                        <td>30.07.2026</td>
+                        <td>10 kun</td>
+                        <td>Oilaviy vaziyat</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('AR-001')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('AR-001')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="pending">
+                        <td>AR-002</td>
+                        <td>Karimova Nilufar Azimovna</td>
+                        <td>Hamshira</td>
+                        <td><span class="badge" style="background: #fef3c7; color: #d97706;">Kasallik</span></td>
+                        <td>16.07.2026</td>
+                        <td>18.07.2026</td>
+                        <td>3 kun</td>
+                        <td>Kasallik (shamollash)</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('AR-002')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('AR-002')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-003</td>
+                        <td>Abdullayev Sardor Olimovich</td>
+                        <td>Laborant</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>10.07.2026</td>
+                        <td>17.07.2026</td>
+                        <td>7 kun</td>
+                        <td>Oilaviy ta'til</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-003')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-004</td>
+                        <td>Rahimova Dilafruz Shavkatovna</td>
+                        <td>Terapevt</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>05.07.2026</td>
+                        <td>12.07.2026</td>
+                        <td>7 kun</td>
+                        <td>Dam olish</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-004')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="pending">
+                        <td>AR-005</td>
+                        <td>Tursunov Aziz Baxtiyorovich</td>
+                        <td>Farmatsevt</td>
+                        <td><span class="badge" style="background: #fee2e2; color: #dc2626;">Shaxsiy</span></td>
+                        <td>22.07.2026</td>
+                        <td>23.07.2026</td>
+                        <td>2 kun</td>
+                        <td>Shaxsiy ish</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('AR-005')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('AR-005')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="rejected">
+                        <td>AR-006</td>
+                        <td>Normatov Jasur Akmalovich</td>
+                        <td>Xavfsizlik xizmati</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>15.07.2026</td>
+                        <td>25.07.2026</td>
+                        <td>10 kun</td>
+                        <td>Dam olish</td>
+                        <td><span class="badge inactive">Rad etilgan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-006')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-007</td>
+                        <td>Yusupova Madina Shavkatovna</td>
+                        <td>Pediatr</td>
+                        <td><span class="badge" style="background: #fef3c7; color: #d97706;">Kasallik</span></td>
+                        <td>12.07.2026</td>
+                        <td>15.07.2026</td>
+                        <td>4 kun</td>
+                        <td>ARVI</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-007')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="pending">
+                        <td>AR-008</td>
+                        <td>Safarov Otabek Ilhomovich</td>
+                        <td>Rentgenolog</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>25.07.2026</td>
+                        <td>05.08.2026</td>
+                        <td>11 kun</td>
+                        <td>Oilaviy ta'til</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('AR-008')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('AR-008')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-009</td>
+                        <td>Hakimova Zulfiya Rustamovna</td>
+                        <td>Hamshira</td>
+                        <td><span class="badge" style="background: #fee2e2; color: #dc2626;">Shaxsiy</span></td>
+                        <td>08.07.2026</td>
+                        <td>09.07.2026</td>
+                        <td>2 kun</td>
+                        <td>Nikoh to'yi</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-009')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="pending">
+                        <td>AR-010</td>
+                        <td>Mirzayev Jamshid Akbarovich</td>
+                        <td>Nevrolog</td>
+                        <td><span class="badge" style="background: #fef3c7; color: #d97706;">Kasallik</span></td>
+                        <td>18.07.2026</td>
+                        <td>20.07.2026</td>
+                        <td>3 kun</td>
+                        <td>Gripp</td>
+                        <td><span class="badge pending">Kutilmoqda</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('AR-010')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('AR-010')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-011</td>
+                        <td>Qosimova Feruza Bakhtiyorovna</td>
+                        <td>Registrator</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>01.07.2026</td>
+                        <td>07.07.2026</td>
+                        <td>6 kun</td>
+                        <td>Oilaviy sayohat</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-011')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-012</td>
+                        <td>Sultanov Davron Uktamovich</td>
+                        <td>Xirurg</td>
+                        <td><span class="badge" style="background: #fee2e2; color: #dc2626;">Shaxsiy</span></td>
+                        <td>14.07.2026</td>
+                        <td>14.07.2026</td>
+                        <td>1 kun</td>
+                        <td>O'qish</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-012')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-013</td>
+                        <td>Hasanova Dilnoza Azimovna</td>
+                        <td>Laborant</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>03.07.2026</td>
+                        <td>10.07.2026</td>
+                        <td>7 kun</td>
+                        <td>Dam olish</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-013')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="rejected">
+                        <td>AR-014</td>
+                        <td>Toshpulatov Anvar Shukurovich</td>
+                        <td>Tozalovchi</td>
+                        <td><span class="badge" style="background: #dbeafe; color: #2563eb;">Ta'til</span></td>
+                        <td>20.07.2026</td>
+                        <td>01.08.2026</td>
+                        <td>12 kun</td>
+                        <td>Qishloqqa ketish</td>
+                        <td><span class="badge inactive">Rad etilgan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-014')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="leave-request" data-status="approved">
+                        <td>AR-015</td>
+                        <td>Ergasheva Sevara Ilhomovna</td>
+                        <td>Hamshira</td>
+                        <td><span class="badge" style="background: #fef3c7; color: #d97706;">Kasallik</span></td>
+                        <td>11.07.2026</td>
+                        <td>13.07.2026</td>
+                        <td>3 kun</td>
+                        <td>Bosh og'riq va harorat</td>
+                        <td><span class="badge active">Tasdiqlangan</span></td>
+                        <td class="action-buttons">
+                            <button class="btn-view" onclick="viewLeaveDetails('AR-015')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- View Patient Modal -->
@@ -1480,7 +1859,8 @@
                 pharmacy: 'Dorixona',
                 payments: 'To\'lovlar',
                 reports: 'Hisobotlar',
-                settings: 'Sozlamalar'
+                settings: 'Sozlamalar',
+                arizalar: 'Xodimlar Arizalari'
             };
             document.getElementById('pageTitle').textContent = titles[sectionId];
         }
@@ -1719,11 +2099,454 @@
         `;
         document.head.appendChild(style);
 
+        // Backend API URL configuration
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:5000/api' 
+            : '/api';
+
         // Chiqish
         function logout() {
             if (confirm('Tizimdan chiqmoqchimisiz?')) {
                 sessionStorage.clear();
                 window.location.href = 'login.html';
+            }
+        }
+
+        // Arizalarni yuklash
+        async function loadLeaveRequests() {
+            try {
+                const response = await fetch(`${API_URL}/leave-requests`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const tbody = document.getElementById('leaveRequestsBody');
+                    
+                    if (result.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 40px;">Hech qanday ariza topilmadi</td></tr>';
+                        return;
+                    }
+                    
+                    tbody.innerHTML = result.data.map((req, index) => {
+                        const statusBadge = req.status === 'pending' ? 
+                            '<span class="badge pending">Kutilmoqda</span>' :
+                            req.status === 'approved' ?
+                            '<span class="badge active">Tasdiqlangan</span>' :
+                            '<span class="badge inactive">Rad etilgan</span>';
+                        
+                        const leaveTypeColor = req.leaveType === 'sick' ? 
+                            'background: #fef3c7; color: #d97706;' :
+                            req.leaveType === 'personal' ?
+                            'background: #fee2e2; color: #dc2626;' :
+                            'background: #dbeafe; color: #2563eb;';
+                        
+                        const actionButtons = req.status === 'pending' ? `
+                            <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="approveLeave('${req.requestId}')">
+                                <i class="fas fa-check"></i> Tasdiqlash
+                            </button>
+                            <button class="btn-delete" onclick="rejectLeave('${req.requestId}')">
+                                <i class="fas fa-times"></i> Rad etish
+                            </button>
+                        ` : `
+                            <button class="btn-view" onclick="viewLeaveDetails('${req.requestId}')">
+                                <i class="fas fa-eye"></i> Ko'rish
+                            </button>
+                        `;
+                        
+                        const startDate = new Date(req.startDate).toLocaleDateString('uz-UZ');
+                        const endDate = new Date(req.endDate).toLocaleDateString('uz-UZ');
+                        
+                        return `
+                            <tr class="leave-request" data-status="${req.status}">
+                                <td>${req.requestId}</td>
+                                <td>${req.employeeName}</td>
+                                <td>${req.employeePosition}</td>
+                                <td><span class="badge" style="${leaveTypeColor}">${req.leaveTypeLabel}</span></td>
+                                <td>${startDate}</td>
+                                <td>${endDate}</td>
+                                <td>${req.days} kun</td>
+                                <td>${req.reason}</td>
+                                <td>${statusBadge}</td>
+                                <td class="action-buttons">${actionButtons}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                    
+                    // Update statistics
+                    await updateLeaveStatistics();
+                }
+            } catch (error) {
+                console.error('Error loading leave requests:', error);
+                showNotification('Arizalarni yuklashda xatolik!', 'error');
+            }
+        }
+
+        // Arizalarni filtrlash
+        function filterLeaveRequests(status) {
+            const rows = document.querySelectorAll('.leave-request');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                if (status === 'all' || row.dataset.status === status) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            // Filter tugmalarini yangilash
+            document.querySelectorAll('#filterAll, #filterPending, #filterApproved, #filterRejected').forEach(btn => {
+                btn.style.opacity = '0.6';
+            });
+            
+            const activeBtn = status === 'all' ? 'filterAll' : 
+                             status === 'pending' ? 'filterPending' :
+                             status === 'approved' ? 'filterApproved' : 'filterRejected';
+            document.getElementById(activeBtn).style.opacity = '1';
+
+            // Agar hech qanday natija bo'lmasa
+            if (visibleCount === 0) {
+                showNotification('Bu filtr bo\'yicha arizalar topilmadi', 'warning');
+            }
+        }
+
+        // Arizani tasdiqlash
+        async function approveLeave(requestId) {
+            if (confirm('Ushbu arizani tasdiqlaysizmi?')) {
+                try {
+                    const response = await fetch(`${API_URL}/leave-requests/${requestId}/approve`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            approvedBy: sessionStorage.getItem('username') || 'Admin'
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showNotification(`✅ Ariza ${requestId} tasdiqlandi!`, 'success');
+                        await loadLeaveRequests();
+                    } else {
+                        showNotification('❌ Xatolik: ' + result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error approving leave:', error);
+                    showNotification('❌ Arizani tasdiqlashda xatolik!', 'error');
+                }
+            }
+        }
+
+        // Arizani rad etish
+        async function rejectLeave(requestId) {
+            const reason = prompt('Rad etish sababini kiriting:');
+            if (reason) {
+                try {
+                    const response = await fetch(`${API_URL}/leave-requests/${requestId}/reject`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            rejectionReason: reason,
+                            rejectedBy: sessionStorage.getItem('username') || 'Admin'
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        showNotification(`❌ Ariza ${requestId} rad etildi!`, 'error');
+                        await loadLeaveRequests();
+                    } else {
+                        showNotification('❌ Xatolik: ' + result.message, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error rejecting leave:', error);
+                    showNotification('❌ Arizani rad etishda xatolik!', 'error');
+                }
+            }
+        }
+
+        // Ariza tafsilotlarini ko'rish
+        async function viewLeaveDetails(requestId) {
+            try {
+                const response = await fetch(`${API_URL}/leave-requests/${requestId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const req = result.data;
+                    const startDate = new Date(req.startDate).toLocaleDateString('uz-UZ');
+                    const endDate = new Date(req.endDate).toLocaleDateString('uz-UZ');
+                    const submittedAt = new Date(req.submittedAt).toLocaleString('uz-UZ');
+                    
+                    let details = `📋 Ariza Tafsilotlari:\n\n`;
+                    details += `ID: ${req.requestId}\n`;
+                    details += `Xodim: ${req.employeeName}\n`;
+                    details += `Lavozim: ${req.employeePosition}\n`;
+                    details += `Turi: ${req.leaveTypeLabel}\n`;
+                    details += `Sana: ${startDate} - ${endDate}\n`;
+                    details += `Kunlar: ${req.days}\n`;
+                    details += `Sabab: ${req.reason}\n`;
+                    details += `Holat: ${req.status === 'pending' ? 'Kutilmoqda' : req.status === 'approved' ? 'Tasdiqlangan' : 'Rad etilgan'}\n`;
+                    details += `Yuborilgan: ${submittedAt}\n`;
+                    
+                    if (req.status !== 'pending') {
+                        const processedAt = new Date(req.processedAt).toLocaleString('uz-UZ');
+                        details += `\nKo'rib chiqildi: ${processedAt}\n`;
+                        details += `Ko'rib chiquvchi: ${req.approvedBy}\n`;
+                        
+                        if (req.status === 'rejected' && req.rejectionReason) {
+                            details += `Rad etish sababi: ${req.rejectionReason}\n`;
+                        }
+                    }
+                    
+                    alert(details);
+                } else {
+                    showNotification('❌ Ariza topilmadi!', 'error');
+                }
+            } catch (error) {
+                console.error('Error viewing leave details:', error);
+                showNotification('❌ Xatolik yuz berdi!', 'error');
+            }
+        }
+
+        // Statistikani yangilash
+        async function updateLeaveStatistics() {
+            try {
+                const response = await fetch(`${API_URL}/leave-requests/stats/summary`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('totalRequests').textContent = result.data.total;
+                    document.getElementById('pendingRequests').textContent = result.data.pending;
+                    document.getElementById('approvedRequests').textContent = result.data.approved;
+                    document.getElementById('rejectedRequests').textContent = result.data.rejected;
+                }
+            } catch (error) {
+                console.error('Error updating statistics:', error);
+            }
+        }
+
+        // Arizalar bo'limi ochilganda ma'lumotlarni yuklash
+        const originalShowSection = showSection;
+        showSection = function(sectionId) {
+            originalShowSection(sectionId);
+            
+            if (sectionId === 'arizalar') {
+                loadLeaveRequests();
+            } else if (sectionId === 'patients') {
+                showPatientsTab('all');
+            }
+        };
+
+        // Patients tab switching
+        function showPatientsTab(tab) {
+            if (tab === 'all') {
+                document.getElementById('allPatientsTab').style.display = 'block';
+                document.getElementById('roomBookingsTab').style.display = 'none';
+            } else if (tab === 'bookings') {
+                document.getElementById('allPatientsTab').style.display = 'none';
+                document.getElementById('roomBookingsTab').style.display = 'block';
+                loadRoomBookings();
+            }
+        }
+
+        // Load room bookings
+        async function loadRoomBookings() {
+            try {
+                const response = await fetch(`${API_URL}/room-bookings`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const tbody = document.getElementById('roomBookingsBody');
+                    
+                    if (result.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="12" style="text-align: center; padding: 40px;">Hech qanday bron topilmadi</td></tr>';
+                        return;
+                    }
+                    
+                    tbody.innerHTML = result.data.map(booking => {
+                        const roomNames = {
+                            'general': 'Umumiy Palata',
+                            'double': 'Ikki Kishilik',
+                            'vip': 'VIP Lyuks'
+                        };
+                        
+                        const statusBadges = {
+                            'pending': '<span class="badge pending">Kutilmoqda</span>',
+                            'confirmed': '<span class="badge" style="background: #dbeafe; color: #2563eb;">Tasdiqlangan</span>',
+                            'checked-in': '<span class="badge active">Yotgan</span>',
+                            'checked-out': '<span class="badge" style="background: #e5e7eb; color: #6b7280;">Chiqdi</span>',
+                            'cancelled': '<span class="badge inactive">Bekor qilingan</span>'
+                        };
+                        
+                        const paymentBadges = {
+                            'pending': '<span class="badge pending">To\'lanmagan</span>',
+                            'paid': '<span class="badge active">To\'langan</span>',
+                            'refunded': '<span class="badge inactive">Qaytarilgan</span>'
+                        };
+                        
+                        const checkIn = new Date(booking.checkInDate).toLocaleDateString('uz-UZ');
+                        const checkOut = new Date(booking.checkOutDate).toLocaleDateString('uz-UZ');
+                        
+                        const services = booking.services && booking.services.length > 0 ?
+                            booking.services.map(s => {
+                                const names = { 'fitness': 'Fitnes', 'kitchen': 'Oshxona', 'pharmacy': 'Dorixona' };
+                                return names[s.name];
+                            }).join(', ') : 'Yo\'q';
+                        
+                        return `
+                            <tr>
+                                <td>${booking.bookingId}</td>
+                                <td>${booking.fullName}</td>
+                                <td>${booking.passport}</td>
+                                <td>${booking.phone}</td>
+                                <td>
+                                    ${roomNames[booking.roomType]}<br>
+                                    <small style="color: #6b7280;">Xizmatlar: ${services}</small>
+                                </td>
+                                <td>${checkIn}</td>
+                                <td>${checkOut}</td>
+                                <td>${booking.days} kun</td>
+                                <td style="font-weight: bold; color: #e74c3c;">${booking.totalPrice.toLocaleString()} so'm</td>
+                                <td>${statusBadges[booking.status]}</td>
+                                <td>${paymentBadges[booking.paymentStatus]}</td>
+                                <td class="action-buttons">
+                                    <button class="btn-view" onclick="viewBookingDetails('${booking.bookingId}')">
+                                        <i class="fas fa-eye"></i> Ko'rish
+                                    </button>
+                                    ${booking.status === 'pending' ? `
+                                        <button class="btn-edit" onclick="confirmBooking('${booking.bookingId}')">
+                                            <i class="fas fa-check"></i> Tasdiqlash
+                                        </button>
+                                    ` : ''}
+                                    ${booking.paymentStatus === 'pending' ? `
+                                        <button class="btn-view" style="background: #d1fae5; color: #059669;" onclick="markAsPaid('${booking.bookingId}')">
+                                            <i class="fas fa-dollar-sign"></i> To'landi
+                                        </button>
+                                    ` : ''}
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error loading bookings:', error);
+                showNotification('Bronlarni yuklashda xatolik!', 'error');
+            }
+        }
+
+        // View booking details
+        async function viewBookingDetails(bookingId) {
+            try {
+                const response = await fetch(`${API_URL}/room-bookings/${bookingId}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const booking = result.data;
+                    const roomNames = {
+                        'general': 'Umumiy Palata',
+                        'double': 'Ikki Kishilik Palata',
+                        'vip': 'VIP Palata (Lyuks)'
+                    };
+                    
+                    const checkIn = new Date(booking.checkInDate).toLocaleDateString('uz-UZ');
+                    const checkOut = new Date(booking.checkOutDate).toLocaleDateString('uz-UZ');
+                    const birthDate = new Date(booking.birthDate).toLocaleDateString('uz-UZ');
+                    const bookingDate = new Date(booking.bookingDate).toLocaleString('uz-UZ');
+                    
+                    let services = 'Yo\'q';
+                    if (booking.services && booking.services.length > 0) {
+                        const serviceNames = {
+                            'fitness': 'Fitnes Klub',
+                            'kitchen': 'Oshxona (Premium)',
+                            'pharmacy': 'Dorixona Xizmati'
+                        };
+                        services = booking.services.map(s => 
+                            `${serviceNames[s.name]} (${s.price.toLocaleString()} so'm/kun)`
+                        ).join('\n');
+                    }
+                    
+                    let details = `🏥 PALATA BRON MA'LUMOTLARI\n\n`;
+                    details += `📋 Bron ID: ${booking.bookingId}\n`;
+                    details += `👤 Bemor: ${booking.fullName}\n`;
+                    details += `🆔 Pasport: ${booking.passport}\n`;
+                    details += `📅 Tug'ilgan: ${birthDate}\n`;
+                    details += `📱 Telefon: ${booking.phone}\n`;
+                    details += `🏨 Palata: ${roomNames[booking.roomType]} (${booking.roomPrice.toLocaleString()} so'm/kun)\n`;
+                    details += `📆 Yotish: ${checkIn}\n`;
+                    details += `📆 Chiqish: ${checkOut}\n`;
+                    details += `🕐 Kunlar: ${booking.days}\n`;
+                    details += `➕ Qo'shimcha xizmatlar:\n${services}\n`;
+                    details += `💰 Jami to'lov: ${booking.totalPrice.toLocaleString()} so'm\n`;
+                    details += `📊 Holat: ${booking.status}\n`;
+                    details += `💳 To'lov: ${booking.paymentStatus}\n`;
+                    if (booking.roomNumber) details += `🚪 Xona raqami: ${booking.roomNumber}\n`;
+                    if (booking.diagnosis) details += `🩺 Kasallik: ${booking.diagnosis}\n`;
+                    details += `🕒 Bron sanasi: ${bookingDate}\n`;
+                    
+                    alert(details);
+                } else {
+                    showNotification('❌ Bron topilmadi!', 'error');
+                }
+            } catch (error) {
+                console.error('Error viewing booking:', error);
+                showNotification('❌ Xatolik yuz berdi!', 'error');
+            }
+        }
+
+        // Confirm booking
+        async function confirmBooking(bookingId) {
+            const roomNumber = prompt('Xona raqamini kiriting:');
+            if (!roomNumber) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/room-bookings/${bookingId}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        status: 'confirmed',
+                        roomNumber: roomNumber
+                    })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showNotification(`✅ Bron ${bookingId} tasdiqlandi!`, 'success');
+                    loadRoomBookings();
+                } else {
+                    showNotification('❌ Xatolik: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error confirming booking:', error);
+                showNotification('❌ Xatolik yuz berdi!', 'error');
+            }
+        }
+
+        // Mark as paid
+        async function markAsPaid(bookingId) {
+            if (!confirm('To\'lov amalga oshirilganini tasdiqlaysizmi?')) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/room-bookings/${bookingId}/payment`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentStatus: 'paid' })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showNotification(`✅ To'lov tasdiqlandi!`, 'success');
+                    loadRoomBookings();
+                } else {
+                    showNotification('❌ Xatolik: ' + result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error marking as paid:', error);
+                showNotification('❌ Xatolik yuz berdi!', 'error');
             }
         }
 

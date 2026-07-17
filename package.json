@@ -1,0 +1,19 @@
+{
+  "name": "medcare-clinic",
+  "version": "1.0.0",
+  "description": "MedCare Clinic - Full Stack Healthcare Management System",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "backend": "cd backend && npm start",
+    "dev": "concurrently \"npm run backend\" \"npx http-server -p 8080\"",
+    "build": "cd medcare-hr-frontend && npm install && npm run build",
+    "vercel-build": "cd medcare-hr-frontend && npm install && npm run build"
+  },
+  "keywords": ["medcare", "clinic", "healthcare", "hr", "management"],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.x"
+  }
+}

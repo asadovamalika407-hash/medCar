@@ -39,6 +39,7 @@
                     <a href="pages/services.html" class="nav-link"><i class="fas fa-heartbeat"></i> Mutaxassislar</a>
                     <a href="pages/head-doctor.html" class="nav-link"><i class="fas fa-stethoscope"></i> Bosh vrach</a>
                     <a href="pages/pharmacy.html" class="nav-link"><i class="fas fa-pills"></i> Dorixona</a>
+                    <a href="#palata-section" class="nav-link" onclick="scrollToPalata(event)"><i class="fas fa-bed"></i> Palata</a>
                     <a href="pages/medical-history.html" class="nav-link"><i class="fas fa-file-medical"></i> Kasallik tarixi</a>
                     <a href="pages/payment.html" class="nav-link"><i class="fas fa-credit-card"></i> To'lov</a>
                 </nav>
@@ -164,6 +165,194 @@
                     <i class="fas fa-procedures"></i>
                     <h4>Jarrohlik</h4>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Palata Booking Section -->
+    <section class="palata-section" id="palata-section">
+        <div class="container">
+            <h2 class="section-title">Palata Band Qilish</h2>
+            <p class="section-subtitle">Qulay palata va qo'shimcha xizmatlarni tanlang</p>
+            
+            <div class="booking-container">
+                <!-- Step 1: Room Selection -->
+                <div class="booking-step active" id="step1">
+                    <h3><i class="fas fa-bed"></i> Xona Turini Tanlang</h3>
+                    <div class="rooms-grid">
+                        <div class="room-card" data-room="general" data-price="150000">
+                            <div class="room-image">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                            <h4>Umumiy Palata</h4>
+                            <p>Bir necha bemor uchun qulay xona</p>
+                            <ul class="room-features">
+                                <li><i class="fas fa-check"></i> 4-6 o'rin</li>
+                                <li><i class="fas fa-check"></i> Umumiy sanitar tugun</li>
+                                <li><i class="fas fa-check"></i> Shifokor nazorati</li>
+                                <li><i class="fas fa="check"></i> Ovqatlanish 3 mahal</li>
+                            </ul>
+                            <div class="room-price">150,000 so'm/kun</div>
+                            <button class="btn-select-room" onclick="selectRoom('general', 150000)">Tanlash</button>
+                        </div>
+
+                        <div class="room-card popular" data-room="double" data-price="300000">
+                            <div class="popular-badge">Mashhur</div>
+                            <div class="room-image">
+                                <i class="fas fa-bed"></i><i class="fas fa-bed"></i>
+                            </div>
+                            <h4>Ikki Kishilik Palata</h4>
+                            <p>Qulay va xavfsiz muhit</p>
+                            <ul class="room-features">
+                                <li><i class="fas fa-check"></i> 2 o'rin</li>
+                                <li><i class="fas fa-check"></i> Alohida sanitar tugun</li>
+                                <li><i class="fas fa-check"></i> TV va Wi-Fi</li>
+                                <li><i class="fas fa-check"></i> Ovqatlanish 4 mahal</li>
+                                <li><i class="fas fa-check"></i> Qarindoshlar uchun divan</li>
+                            </ul>
+                            <div class="room-price">300,000 so'm/kun</div>
+                            <button class="btn-select-room" onclick="selectRoom('double', 300000)">Tanlash</button>
+                        </div>
+
+                        <div class="room-card premium" data-room="vip" data-price="600000">
+                            <div class="premium-badge">VIP</div>
+                            <div class="room-image">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h4>VIP Palata (Lyuks)</h4>
+                            <p>Maksimal qulaylik va xizmat</p>
+                            <ul class="room-features">
+                                <li><i class="fas fa-check"></i> 1 kishilik xona</li>
+                                <li><i class="fas fa-check"></i> Shaxsiy sanitar tugun va dush</li>
+                                <li><i class="fas fa-check"></i> Smart TV, Wi-Fi, konditsioner</li>
+                                <li><i class="fas fa-check"></i> VIP ovqatlanish</li>
+                                <li><i class="fas fa-check"></i> Qarindoshlar uchun yotoq joy</li>
+                                <li><i class="fas fa-check"></i> 24/7 shaxsiy hamshira</li>
+                                <li><i class="fas fa-check"></i> Massaj va fizioterapiya</li>
+                            </ul>
+                            <div class="room-price">600,000 so'm/kun</div>
+                            <button class="btn-select-room" onclick="selectRoom('vip', 600000)">Tanlash</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Additional Services -->
+                <div class="booking-step" id="step2">
+                    <h3><i class="fas fa-concierge-bell"></i> Qo'shimcha Xizmatlar</h3>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <div class="service-icon"><i class="fas fa-dumbbell"></i></div>
+                            <h4>Fitnes Klub</h4>
+                            <p>Zamonaviy sport zal va murabbiy xizmati</p>
+                            <div class="service-price">50,000 so'm/kun</div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" data-service="fitness" data-price="50000" onchange="updateServices()">
+                                <span class="checkmark"></span>
+                                Tanlash
+                            </label>
+                        </div>
+
+                        <div class="service-card">
+                            <div class="service-icon"><i class="fas fa-utensils"></i></div>
+                            <h4>Oshxona (Premium)</h4>
+                            <p>Maxsus parhez va menyular, 5 mahal ovqatlanish</p>
+                            <div class="service-price">80,000 so'm/kun</div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" data-service="kitchen" data-price="80000" onchange="updateServices()">
+                                <span class="checkmark"></span>
+                                Tanlash
+                            </label>
+                        </div>
+
+                        <div class="service-card">
+                            <div class="service-icon"><i class="fas fa-pills"></i></div>
+                            <h4>Dorixona Xizmati</h4>
+                            <p>Dori-darmonlar yetkazib berish va maslaxat</p>
+                            <div class="service-price">30,000 so'm/kun</div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" data-service="pharmacy" data-price="30000" onchange="updateServices()">
+                                <span class="checkmark"></span>
+                                Tanlash
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="booking-actions">
+                        <button class="btn-secondary" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Orqaga</button>
+                        <button class="btn-primary" onclick="goToStep(3)">Davom etish <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Patient Information -->
+                <div class="booking-step" id="step3">
+                    <h3><i class="fas fa-user"></i> Bemor Ma'lumotlari</h3>
+                    <form id="patientBookingForm" class="booking-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> F.I.O. *</label>
+                                <input type="text" name="fullName" required placeholder="Ism Familiya Otasining ismi">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-id-card"></i> Pasport seriyasi *</label>
+                                <input type="text" name="passport" required placeholder="AA 1234567">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-birthday-cake"></i> Tug'ilgan sana *</label>
+                                <input type="date" name="birthDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> Telefon *</label>
+                                <input type="tel" name="phone" required placeholder="+998 90 123 45 67">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> Yotish sanasi *</label>
+                                <input type="date" name="checkInDate" required id="checkInDate" onchange="calculateDays()">
+                            </div>
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar-check"></i> Chiqish sanasi *</label>
+                                <input type="date" name="checkOutDate" required id="checkOutDate" onchange="calculateDays()">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><i class="fas fa-notes-medical"></i> Kasallik haqida qisqacha</label>
+                            <textarea name="diagnosis" rows="3" placeholder="Shikoyatlar va kasallik haqida ma'lumot..."></textarea>
+                        </div>
+
+                        <div class="booking-summary">
+                            <h4><i class="fas fa-file-invoice-dollar"></i> Xarajatlar Hisob-kitobi</h4>
+                            <div class="summary-row">
+                                <span>Palata turi:</span>
+                                <span id="summaryRoom">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Kunlik narx:</span>
+                                <span id="summaryRoomPrice">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Kunlar soni:</span>
+                                <span id="summaryDays">0 kun</span>
+                            </div>
+                            <div id="servicesSummary"></div>
+                            <div class="summary-divider"></div>
+                            <div class="summary-row total">
+                                <span>Jami to'lov:</span>
+                                <span id="summaryTotal">0 so'm</span>
+                            </div>
+                        </div>
+
+                        <div class="booking-actions">
+                            <button type="button" class="btn-secondary" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Orqaga</button>
+                            <button type="submit" class="btn-primary"><i class="fas fa-credit-card"></i> To'lovga o'tish</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </section>

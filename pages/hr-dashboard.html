@@ -6,6 +6,8 @@
     <title>HR Dashboard - MedCare</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         .hr-container { max-width: 1400px; margin: 0 auto; padding: 20px; }
         .hr-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
@@ -55,6 +57,55 @@
         .form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
         .btn-submit { background: #1976d2; color: white; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; }
         .btn-cancel { background: #e0e0e0; color: #333; border: none; padding: 12px 30px; border-radius: 5px; cursor: pointer; }
+        .status-btn { 
+            flex: 1; 
+            min-width: 140px; 
+            padding: 15px 20px; 
+            border: 2px solid #e0e0e0; 
+            background: white; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 15px; 
+            font-weight: 600; 
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .status-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .status-btn.selected[data-status="present"] { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+        .status-btn.selected[data-status="late"] { background: #fff3e0; border-color: #ed6c02; color: #ed6c02; }
+        .status-btn.selected[data-status="absent"] { background: #ffebee; border-color: #d32f2f; color: #d32f2f; }
+        .btn-filter {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-filter:hover { border-color: #1976d2; color: #1976d2; }
+        .btn-filter.active { background: #1976d2; color: white; border-color: #1976d2; }
+        .btn-download {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-download:hover { background: #059669; }
     </style>
 </head>
 <body>
@@ -225,25 +276,303 @@
         <!-- Salary Tab -->
         <div id="salary-tab" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-money-bill-wave"></i> Maosh Hisoblash</h3>
-                <p>Oylik maosh hisob-varaqlari va to'lovlar tizimi ishlab chiqilmoqda...</p>
+                <div class="card-header">
+                    <h3><i class="fas fa-money-bill-wave"></i> Oylik Maosh Hisoblash</h3>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="salaryMonthFilter" onchange="filterSalaryByMonth()" style="padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                            <option value="2026-01">Yanvar 2026</option>
+                            <option value="2026-02">Fevral 2026</option>
+                            <option value="2026-03">Mart 2026</option>
+                            <option value="2026-04">Aprel 2026</option>
+                            <option value="2026-05">May 2026</option>
+                            <option value="2026-06">Iyun 2026</option>
+                            <option value="2026-07" selected>Iyul 2026</option>
+                            <option value="2026-08">Avgust 2026</option>
+                            <option value="2026-09">Sentyabr 2026</option>
+                            <option value="2026-10">Oktyabr 2026</option>
+                            <option value="2026-11">Noyabr 2026</option>
+                            <option value="2026-12">Dekabr 2026</option>
+                        </select>
+                        <button class="btn-add" onclick="exportSalaryReport()">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Salary Statistics -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Jami Maosh Fondi</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="totalSalaryFund">0 so'm</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">O'rtacha Maosh</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="averageSalary">0 so'm</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Eng Yuqori Maosh</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="maxSalary">0 so'm</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Eng Past Maosh</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="minSalary">0 so'm</div>
+                    </div>
+                </div>
+
+                <!-- Salary Table -->
+                <table id="salaryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Xodim</th>
+                            <th>Lavozim</th>
+                            <th>Bo'lim</th>
+                            <th>Asosiy Maosh</th>
+                            <th>Bonus</th>
+                            <th>Chegirmalar</th>
+                            <th>Jami To'lov</th>
+                            <th>Holat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salaryTableBody">
+                        <!-- JavaScript bilan to'ldiriladi -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Leave Tab -->
         <div id="leave-tab" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-plane-departure"></i> Ta'til va Kasallik</h3>
-                <p>Ta'til so'rovlari va kasallik varaqalari tizimi ishlab chiqilmoqda...</p>
+                <div class="card-header">
+                    <h3><i class="fas fa-plane-departure"></i> Ta'til va Kasallik</h3>
+                    <button class="btn-add" onclick="openLeaveRequestModal()">
+                        <i class="fas fa-plus"></i> Ta'til So'rovi
+                    </button>
+                </div>
+
+                <!-- Leave Statistics -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Kutilmoqda</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="leavePending">0</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Tasdiqlangan</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="leaveApproved">0</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Rad Etilgan</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="leaveRejected">0</div>
+                    </div>
+                    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 10px;">
+                        <div style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Ta'tilda</div>
+                        <div style="font-size: 28px; font-weight: bold;" id="leaveOngoing">0</div>
+                    </div>
+                </div>
+
+                <!-- Leave Requests Table -->
+                <table id="leaveTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Xodim</th>
+                            <th>Lavozim</th>
+                            <th>Ta'til Turi</th>
+                            <th>Boshlanish</th>
+                            <th>Tugash</th>
+                            <th>Kunlar</th>
+                            <th>Sabab</th>
+                            <th>Holat</th>
+                            <th>Amallar</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveTableBody">
+                        <!-- JavaScript bilan to'ldiriladi -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Documents Tab -->
         <div id="documents-tab" class="tab-content">
             <div class="card">
-                <h3><i class="fas fa-file-alt"></i> Hujjatlar</h3>
-                <p>Xodimlar hujjatlari boshqaruvi tizimi ishlab chiqilmoqda...</p>
+                <div class="card-header">
+                    <h3><i class="fas fa-file-alt"></i> Xodimlar Hujjatlari</h3>
+                    <button class="btn-add" onclick="openUploadDocumentModal()">
+                        <i class="fas fa-upload"></i> Hujjat Yuklash
+                    </button>
+                </div>
+
+                <!-- Documents Table -->
+                <table id="documentsTable">
+                    <thead>
+                        <tr>
+                            <th>Xodim</th>
+                            <th>Lavozim</th>
+                            <th>Hujjatlar</th>
+                            <th>Yuklangan Sana</th>
+                            <th>Fayl Hajmi</th>
+                            <th>Holat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="documentsTableBody">
+                        <!-- JavaScript bilan to'ldiriladi -->
+                    </tbody>
+                </table>
             </div>
+        </div>
+    </div>
+
+    <!-- Upload Document Modal -->
+    <div id="uploadDocumentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-upload"></i> Hujjat Yuklash</h3>
+                <button class="close-modal" onclick="closeUploadDocumentModal()">&times;</button>
+            </div>
+            <form id="uploadDocumentForm">
+                <div class="form-group">
+                    <label>Xodimni Tanlang *</label>
+                    <select name="employeeId" id="docEmployeeSelect" required>
+                        <option value="">Xodim tanlang...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hujjat Turi *</label>
+                    <select name="documentType" required>
+                        <option value="">Tanlang...</option>
+                        <option value="passport"><i class="fas fa-id-card"></i> Pasport Nusxasi</option>
+                        <option value="contract"><i class="fas fa-file-contract"></i> Mehnat Shartnomasi</option>
+                        <option value="diploma"><i class="fas fa-graduation-cap"></i> Diplom</option>
+                        <option value="certificate"><i class="fas fa-certificate"></i> Sertifikat</option>
+                        <option value="recommendation"><i class="fas fa-envelope"></i> Tavsiya Xati</option>
+                        <option value="other"><i class="fas fa-folder"></i> Boshqa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Hujjat Nomi *</label>
+                    <input type="text" name="documentName" required placeholder="Masalan: Pasport nusxasi 2024">
+                </div>
+                <div class="form-group">
+                    <label>Fayl</label>
+                    <div style="border: 2px dashed #ddd; padding: 30px; text-align: center; border-radius: 8px; background: #f9f9f9;">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #999; margin-bottom: 10px;"></i>
+                        <p style="color: #666; margin-bottom: 10px;">Faylni bu yerga torting yoki tanlang</p>
+                        <input type="file" name="file" id="documentFile" style="display: none;" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                        <button type="button" class="btn-submit" onclick="document.getElementById('documentFile').click()">
+                            Fayl Tanlash
+                        </button>
+                        <p id="selectedFileName" style="margin-top: 10px; color: #1976d2; font-weight: 600;"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Izoh</label>
+                    <textarea name="note" placeholder="Qo'shimcha izoh (ixtiyoriy)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeUploadDocumentModal()">Bekor qilish</button>
+                    <button type="submit" class="btn-submit">Yuklash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leave Request Modal -->
+    <div id="leaveRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plane-departure"></i> Ta'til So'rovi</h3>
+                <button class="close-modal" onclick="closeLeaveRequestModal()">&times;</button>
+            </div>
+            <form id="leaveRequestForm">
+                <div class="form-group">
+                    <label>Xodimni Tanlang *</label>
+                    <select name="employeeId" id="leaveEmployeeSelect" required>
+                        <option value="">Xodim tanlang...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ta'til Turi *</label>
+                    <select name="leaveType" required>
+                        <option value="">Tanlang...</option>
+                        <option value="paid"><i class="fas fa-money-bill-wave"></i> Klinika Hisobidan Ta'til (Pullik)</option>
+                        <option value="unpaid"><i class="fas fa-briefcase"></i> O'z Hisobidan Ta'til (Maoshsiz)</option>
+                        <option value="sick"><i class="fas fa-notes-medical"></i> Kasallik Varaqasi</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Boshlanish Sanasi *</label>
+                        <input type="date" name="startDate" id="leaveStartDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tugash Sanasi *</label>
+                        <input type="date" name="endDate" id="leaveEndDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Kunlar Soni</label>
+                    <input type="number" name="days" id="leaveDays" readonly style="background: #f5f5f5;">
+                </div>
+                <div class="form-group">
+                    <label>Sabab *</label>
+                    <textarea name="reason" required placeholder="Ta'til sababini yozing..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeLeaveRequestModal()">Bekor qilish</button>
+                    <button type="submit" class="btn-submit">Yuborish</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mark Attendance Modal -->
+    <div id="markAttendanceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-calendar-check"></i> Davomat Belgilash</h3>
+                <button class="close-modal" onclick="closeAttendanceModal()">&times;</button>
+            </div>
+            <form id="markAttendanceForm">
+                <div class="form-group">
+                    <label>Xodimni Tanlang *</label>
+                    <select name="employeeId" id="attendanceEmployeeSelect" required>
+                        <option value="">Xodim tanlang...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Holat *</label>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" class="status-btn" data-status="present" onclick="selectAttendanceStatus('present')">
+                            <i class="fas fa-check-circle"></i> Keldi
+                        </button>
+                        <button type="button" class="status-btn" data-status="late" onclick="selectAttendanceStatus('late')">
+                            <i class="fas fa-clock"></i> Kech qoldi
+                        </button>
+                        <button type="button" class="status-btn" data-status="absent" onclick="selectAttendanceStatus('absent')">
+                            <i class="fas fa-times-circle"></i> Kelmadi
+                        </button>
+                    </div>
+                    <input type="hidden" name="status" id="attendanceStatus" required>
+                </div>
+                <div class="form-group" id="arrivalTimeGroup" style="display: none;">
+                    <label>Kelish Vaqti</label>
+                    <input type="time" name="arrivalTime" id="arrivalTime">
+                </div>
+                <div class="form-group" id="departureTimeGroup" style="display: none;">
+                    <label>Ketish Vaqti</label>
+                    <input type="time" name="departureTime" id="departureTime">
+                </div>
+                <div class="form-group">
+                    <label>Izoh</label>
+                    <textarea name="note" id="attendanceNote" placeholder="Izoh yozing (ixtiyoriy)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAttendanceModal()">Bekor qilish</button>
+                    <button type="submit" class="btn-submit">Saqlash</button>
+                </div>
+            </form>
         </div>
     </div>
 

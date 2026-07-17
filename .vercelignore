@@ -1,0 +1,7 @@
+node_modules
+.git
+.env
+*.log
+.DS_Store
+backend/.env
+medcare-hr-frontend/node_modules

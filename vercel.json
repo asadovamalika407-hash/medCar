@@ -1,5 +1,19 @@
 {
   "version": 2,
+  "name": "medcare-clinic-fullstack",
+  "builds": [
+    {
+      "src": "api/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "medcare-hr-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "medcare-hr-frontend/dist"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -7,7 +21,11 @@
     },
     {
       "src": "/hr/(.*)",
-      "dest": "/medcare-hr-frontend/$1"
+      "dest": "/medcare-hr-frontend/dist/$1"
+    },
+    {
+      "src": "/hr",
+      "dest": "/medcare-hr-frontend/dist/index.html"
     },
     {
       "src": "/pages/(.*)",
@@ -27,10 +45,6 @@
     },
     {
       "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|json))",
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
       "dest": "/$1"
     }
   ],
@@ -64,12 +78,6 @@
           "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
         }
       ]
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/hr/:path*",
-      "destination": "/medcare-hr-frontend/:path*"
     }
   ]
 }

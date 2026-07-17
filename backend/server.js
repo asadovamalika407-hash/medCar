@@ -10,20 +10,28 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ MongoDB ga ulandi!'))
-  .catch(err => console.error('❌ MongoDB ulanish xatosi:', err));
+// Request logging middleware (development mode)
+if (process.env.NODE_ENV !== 'production') {
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.path}`);
+    next();
+  });
+}
 
-// Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/employees', require('./routes/employees'));
-app.use('/api/attendance', require('./routes/attendance'));
-app.use('/api/salary', require('./routes/salary'));
-app.use('/api/leave', require('./routes/leave'));
-app.use('/api/documents', require('./routes/documents'));
-app.use('/api/patients', require('./routes/patients'));
-app.use('/api/doctors', require('./routes/doctors'));
+// MongoDB connection is now managed by the connection manager
+// Connection will be established lazily in the serverless function entry point
+
+// Routes (Vercel da /api/ prefix oldin qo'shilgan, shuning uchun bu yerda o'chirish kerak)
+app.use('/auth', require('./routes/auth'));
+app.use('/employees', require('./routes/employees'));
+app.use('/attendance', require('./routes/attendance'));
+app.use('/salary', require('./routes/salary'));
+app.use('/leave', require('./routes/leave'));
+app.use('/leave-requests', require('./routes/leaveRequests'));
+app.use('/room-bookings', require('./routes/roomBookings'));
+app.use('/documents', require('./routes/documents'));
+app.use('/patients', require('./routes/patients'));
+app.use('/doctors', require('./routes/doctors'));
 
 // Root route
 app.get('/', (req, res) => {
@@ -37,6 +45,8 @@ app.get('/', (req, res) => {
       attendance: '/api/attendance',
       salary: '/api/salary',
       leave: '/api/leave',
+      leaveRequests: '/api/leave-requests',
+      roomBookings: '/api/room-bookings',
       documents: '/api/documents',
       patients: '/api/patients',
       doctors: '/api/doctors'
@@ -44,13 +54,45 @@ app.get('/', (req, res) => {
   });
 });
 
-// Error handling
+// Error handling middleware (must be last)
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Server xatosi!', error: err.message });
+  // Log error with context
+  console.error('[Error]', {
+    message: err.message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    method: req.method,
+    path: req.path,
+    timestamp: new Date().toISOString()
+  });
+
+  // Determine status code
+  const statusCode = err.statusCode || err.status || 500;
+  
+  // Send error response
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || 'Server error',
+    error: process.env.NODE_ENV === 'development' ? err.stack : undefined
+  });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server ishga tushdi: http://localhost:${PORT}`);
-});
+// Vercel serverless function export
+module.exports = app;
+
+// Local development server
+if (require.main === module) {
+  const { connectToDatabase } = require('./lib/mongodb');
+  const PORT = process.env.PORT || 5000;
+  
+  // Connect to MongoDB before starting the local server
+  connectToDatabase()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`🚀 Server ishga tushdi: http://localhost:${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error('❌ Failed to connect to MongoDB:', err.message);
+      process.exit(1);
+    });
+}

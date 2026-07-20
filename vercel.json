@@ -9,10 +9,10 @@
       }
     },
     {
-      "src": "package.json",
+      "src": "medcare-hr-frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "medcare-hr-frontend/dist"
+        "distDir": "dist"
       }
     }
   ],
@@ -26,16 +26,19 @@
       "dest": "/api/index.js"
     },
     {
-      "src": "/hr/(.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|json))",
-      "dest": "/medcare-hr-frontend/dist/$1"
+      "src": "/hr/assets/(.*)",
+      "dest": "/hr/assets/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/hr/(.*)",
-      "dest": "/medcare-hr-frontend/dist/index.html"
+      "dest": "/hr/index.html"
     },
     {
       "src": "/hr",
-      "dest": "/medcare-hr-frontend/dist/index.html"
+      "dest": "/hr/index.html"
     },
     {
       "src": "/pages/(.*)",
@@ -52,10 +55,6 @@
     {
       "src": "/",
       "dest": "/index.html"
-    },
-    {
-      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|css|js|json))",
-      "dest": "/$1"
     }
   ],
   "headers": [

@@ -30,7 +30,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/index.html"
+      "dest": "/medcare-hr-frontend/dist/index.html"
     }
   ],
   "headers": [

@@ -1,28 +1,10 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/index.js",
-      "use": "@vercel/node",
-      "config": {
-        "maxDuration": 10
-      }
-    },
-    {
-      "src": "medcare-hr-frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
+  "buildCommand": "cd medcare-hr-frontend && npm install && npm run build",
+  "outputDirectory": "medcare-hr-frontend/dist",
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/index.js"
-    },
-    {
-      "src": "/api",
       "dest": "/api/index.js"
     },
     {
@@ -30,7 +12,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/medcare-hr-frontend/dist/index.html"
+      "dest": "/index.html"
     }
   ],
   "headers": [
